@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bfkdesign | Premium Digital Agency</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bg: '#f7f4ef',
+                        dark: '#040303',
+                        accent: '#ed6c30',
+                        'accent-hover': '#d65b25',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #f7f4ef;
+            color: #040303;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container-custom {
+            width: 90%;
+            max-width: 1440px;
+            margin: 0 auto;
+        }
+
+        /* Floating Nav Logic */
+        #navbar {
+            transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+            top: 2rem;
+        }
+        
+        #navbar.scrolled {
+            top: 1.5rem;
+            width: 85%; /* Slightly narrower on scroll */
+        }
+
+        .glass-nav {
+            background: rgba(247, 244, 239, 0.65); /* Using bg color with opacity */
+            backdrop-filter: blur(8px); /* Lowered blur for clarity */
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(4, 3, 3, 0.05);
+        }
+
+        /* Nav Link Effects */
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+            color: inherit;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1.5px;
+            bottom: -4px;
+            left: 0;
+            background-color: #ed6c30;
+            transition: width 0.3s cubic-bezier(0.65, 0, 0.35, 1);
+        }
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+
+        /* Active link color */
+        .nav-link.active {
+            color: #ed6c30;
+        }
+        .nav-link.active:hover {
+            color: #ed6c30;
+        }
+
+        /* Mobile menu active link */
+        .mobile-link.active {
+            color: #ed6c30 !important;
+        }
+        .mobile-link.active:hover {
+            color: #ed6c30 !important;
+        }
+
+        /* Hamburger Button (mobile) */
+        #menu-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 9999px;
+            display: hidden;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+        #menu-btn:hover { background-color: rgba(4,3,3,0.06); transform: scale(1.03); }
+        .hamburger { width: 20px; height: 14px; position: relative; display: inline-block; }
+        .hamburger-line {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #040303;
+            transition: transform 0.25s ease, opacity 0.2s ease;
+        }
+        .hamburger-line:nth-child(1) { top: 0; }
+        .hamburger-line:nth-child(2) { top: 50%; transform: translateY(-50%); }
+        .hamburger-line:nth-child(3) { bottom: 0; }
+        /* Open state */
+        #menu-btn.open .hamburger-line:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+        #menu-btn.open .hamburger-line:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        #menu-btn.open .hamburger-line:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+        /* Mobile link hover/press effect */
+        .mobile-link {
+            transition: color 0.18s ease, transform 0.12s ease;
+        }
+        .mobile-link:hover, .mobile-link:focus {
+            color: #ed6c30;
+            transform: translateX(8px);
+        }
+
+        /* Reveal Animation on Scroll */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Available Project Badge Pulse */
+        @keyframes gentlePulse {
+            0% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 rgba(237,108,48,0); }
+            50% { transform: scale(1.06); opacity: 0.95; box-shadow: 0 10px 30px rgba(237,108,48,0.06); }
+            100% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 rgba(237,108,48,0); }
+        }
+        .pulse-badge {
+            display: inline-block;
+            animation: gentlePulse 2.6s cubic-bezier(0.4,0,0.2,1) infinite;
+            will-change: transform, opacity;
+            transition: box-shadow 0.22s ease;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .pulse-badge { animation: none !important; }
+        }
+
+        /* About section cursor follower */
+        #about { position: relative; overflow: hidden; }
+        .about-follower {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: visible;
+        }
+        .about-follower .about-dot {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 360px;
+            height: 360px;
+            border-radius: 50%;
+            background: radial-gradient(circle at center, rgba(237,108,48,0.28) 0%, rgba(237,108,48,0.12) 30%, transparent 55%);
+            filter: blur(40px);
+            transform: translate(-50%,-50%) scale(0.9);
+            opacity: 0;
+            transition: opacity 0.28s linear;
+            will-change: transform, opacity;
+            mix-blend-mode: screen;
+            pointer-events: none;
+        }
+        .about-follower .about-dot:nth-child(2) { width: 260px; height: 260px; filter: blur(36px); background: radial-gradient(circle at center, rgba(237,108,48,0.22) 0%, rgba(237,108,48,0.09) 30%, transparent 55%); }
+        .about-follower .about-dot:nth-child(3) { width: 160px; height: 160px; filter: blur(30px); background: radial-gradient(circle at center, rgba(237,108,48,0.18) 0%, rgba(237,108,48,0.08) 30%, transparent 55%); }
+        .about-follower .about-dot:nth-child(4) { width: 90px; height: 90px; filter: blur(20px); background: radial-gradient(circle at center, rgba(237,108,48,0.14) 0%, rgba(237,108,48,0.06) 30%, transparent 55%); }
+
+        @media (max-width: 767px) {
+            .about-follower .about-dot { width: 220px; height: 220px; filter: blur(32px); }
+            .about-follower .about-dot:nth-child(2) { width: 160px; height: 160px; }
+            .about-follower .about-dot:nth-child(3) { width: 100px; height: 100px; }
+            .about-follower .about-dot:nth-child(4) { width: 60px; height: 60px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .about-follower { transition: none; }
+            .about-follower .about-dot { opacity: 0; transform: translate(-50%, -50%) scale(1); filter: blur(12px); }
+        }
+
+        /* Project Cards Styling */
+        .work-card {
+            transition: all 0.5s ease;
+        }
+        .project-card-img {
+            transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .work-card:hover .project-card-img {
+            transform: scale(1.05);
+        }
+        .project-overlay {
+            background: rgba(4, 3, 3, 0.6);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .work-card:hover .project-overlay {
+            opacity: 1;
+        }
+        /* Slider Transition */
+        .slider-track {
+            display: flex;
+            height: 100%;
+            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .glass-view-btn {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        /* Modern Form Inputs */
+        .form-input {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(4,3,3, 0.15);
+            padding: 1.25rem 0;
+            transition: all 0.3s ease;
+            outline: none;
+            border-radius: 0;
+            width: 100%;
+        }
+        .form-input:focus {
+            border-bottom-color: #ed6c30;
+            padding-left: 10px;
+        }
+
+        /* Modal Transitions */
+        #project-modal {
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+        .modal-content-wrapper {
+            transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+            border-radius: 0; /* Make modal not round */
+            overflow: hidden;
+        }
+        #project-modal.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        #project-modal.flex .modal-content-wrapper {
+            transform: scale(1);
+        }
+        #project-modal.hidden .modal-content-wrapper {
+            transform: scale(0.95);
+        }
+
+        /* Slider styles */
+        .modal-slider { height: 100%; position: relative; }
+        .modal-slider .slides { display: flex; height: 100%; transition: transform 0.6s cubic-bezier(0.22,1,0.36,1); will-change: transform; }
+        .modal-slider .slide { flex: 0 0 100%; height: 100%; overflow: hidden; }
+        .modal-slider .slide img { width: 100%; height: 100%; object-fit: cover; display: block; object-position: center; }
+        .prev-slide, .next-slide { display: flex; align-items: center; justify-content: center; border-radius: 8px; background: rgba(255,255,255,0.06); padding: 0.75rem; transition: background 0.2s, transform 0.18s; }
+        .prev-slide:hover, .next-slide:hover { background: rgba(255,255,255,0.12); transform: translateY(-2px); }
+
+        /* Carousel indicator with blurred pill */
+        .slider-controls .dots { display: flex; gap: 0.6rem; align-items: center; background: rgba(255,255,255,0.06); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); padding: 6px 10px; border-radius: 9999px; box-shadow: 0 6px 18px rgba(4,3,3,0.06); }
+        .slider-controls .dots .dot { width: 10px; height: 10px; background: rgba(255,255,255,0.18); border-radius: 9999px; display: inline-block; cursor: pointer; border: none; transition: transform 0.22s ease, background 0.22s ease, box-shadow 0.22s ease; }
+        .slider-controls .dots .dot:focus { outline: 2px solid rgba(237,108,48,0.18); }
+        .slider-controls .dots .dot.active { background: white; transform: scale(1.15); box-shadow: 0 6px 20px rgba(0,0,0,0.18); }
+
+        .slide-caption { position: absolute; left: 1rem; bottom: 1rem; color: rgba(255,255,255,0.9); background: rgba(0,0,0,0.25); padding: 0.5rem 0.75rem; border-radius: 6px; font-size: 12px; }
+        .slider-controls { position: absolute; left: 50%; transform: translateX(-50%); bottom: 1rem; z-index: 20; }
+
+        /* Next project button fill on hover */
+        .next-project-btn { background: transparent; border: 1px solid rgba(4,3,3,0.06); padding: 0.7rem 1rem; border-radius: 10px; transition: all 0.22s ease; }
+        .next-project-btn:hover { background: #ed6c30; color: white; border-color: transparent; box-shadow: 0 10px 30px rgba(237,108,48,0.18); transform: translateY(-3px); }
+
+        /* Modal stats cards */
+        .modal-stats { margin-top: 1rem; display: grid; grid-template-columns: repeat(2,1fr); gap: 0.75rem; }
+        .modal-stats .stat { background: rgba(4,3,3,0.02); padding: 0.75rem 1rem; border-radius: 8px; text-align: left; }
+        .modal-stats .stat .label { font-size: 10px; color: rgba(4,3,3,0.35); text-transform: uppercase; letter-spacing: 0.18em; }
+        .modal-stats .stat .value { font-weight: 700; margin-top: 0.25rem; }
+
+        /* Responsive modal sizing */
+        @media (max-width: 767px) {
+            .modal-content-wrapper { max-height: 100vh; height: 100vh; }
+            .modal-content-wrapper .flex-1{ height: 40vh; }
+            .modal-content-wrapper .flex-1 { max-height: calc(60vh); overflow-y: auto; padding-left: 1rem; padding-right: 1rem; }
+            .modal-stats { grid-template-columns: repeat(2,1fr); }
+            .slider-controls { bottom: 12px; }
+            .prev-slide, .next-slide { padding: 0.5rem; }
+
+            /* Make project overlay visible and readable on small screens */
+            .work-card .project-overlay { opacity: 1; background: linear-gradient(180deg, rgba(4,3,3,0.12), rgba(4,3,3,0.48)); justify-content: flex-end; text-align: left; padding: 1rem; }
+            .work-card .project-overlay h3 { font-size: 1.25rem; }
+            .work-card .glass-view-btn { display: inline-block; }
+        }
+
+        /* Hide scrollbar but keep functionality */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="font-sans selection:bg-accent selection:text-white">
+
+    <!-- NAVIGATION -->
+    <header class="fixed left-1/2 -translate-x-1/2 w-[90%] max-w-7xl z-50 glass-nav rounded-full transition-all duration-500" id="navbar">
+        <div class="px-6 md:px-10 h-16 md:h-20 flex items-center justify-between transition-all duration-500" id="nav-container">
+            <a href="#home" class="flex items-center gap-3">
+                <img src="./assets/black.png" alt="Bfkdesign logo" class="h-6 w-auto">
+            </a>
+
+            <nav class="hidden md:flex items-center gap-8 text-[12px] font-bold uppercase tracking-[0.2em] text-dark/70">
+                <a href="#home" class="nav-link active">Home</a>
+                <a href="#works" class="nav-link">Works</a>
+                <a href="#services" class="nav-link">Services</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </nav>
+
+            <div class="flex items-center gap-4">
+                <a href="#contact" class="hidden lg:block text-[10px] font-bold uppercase tracking-widest bg-dark text-white px-5 py-2.5 rounded-full hover:bg-accent transition-colors shadow-lg shadow-dark/5">Inquiry</a>
+                <button class="md:hidden" id="menu-btn" aria-expanded="false" aria-controls="mobile-menu">
+                    <span class="hamburger" aria-hidden="true">
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MOBILE MENU (Slide from right) -->
+    <div id="mobile-menu" class="fixed inset-0 bg-dark z-[60] transform translate-x-full transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] flex flex-col p-12">
+        <div class="flex justify-between items-center mb-20">
+            <img src="./assets/1.svg" alt="Bfkdesign logo" class="h-6 w-auto">
+            <button class="text-white text-3xl" id="menu-close">
+                <i class="ph ph-x"></i>
+            </button>
+        </div>
+        <div class="flex flex-col gap-8">
+            <a href="#home" class="mobile-link text-3xl font-display italic text-white/40 hover:text-white transition-colors">Home</a>
+            <a href="#works" class="mobile-link text-3xl font-display italic text-white/40 hover:text-white transition-colors">Works</a>
+            <a href="#services" class="mobile-link text-3xl font-display italic text-white/40 hover:text-white transition-colors">Services</a>
+            <a href="#about" class="mobile-link text-3xl font-display italic text-white/40 hover:text-white transition-colors">About</a>
+            <a href="#contact" class="mobile-link text-3xl font-display italic text-accent">Contact</a>
+        </div>
+        <div class="mt-auto border-t border-white/10 pt-8 flex gap-6 text-white/40 text-sm">
+            <a href="#">Instagram</a>
+            <a href="#">LinkedIn</a>
+            <a href="#">Dribbble</a>
+        </div>
+    </div>
+
+    <!-- HERO SECTION -->
+    <section id="home" class="md:min-h-screen flex items-center pt-36 relative overflow-hidden bg-bg">
+        <div class="container-custom relative z-10">
+            <div class="max-w-5xl">
+                <div class="reveal mb-10">
+                    <span class="px-5 py-2 border border-accent/20 bg-accent/5 text-accent rounded-full text-[10px] font-bold uppercase tracking-widest pulse-badge inline-block">
+                        Available for new Projects
+                    </span>
+                </div>
+                <h1 class="reveal font-display text-6xl md:text-8xl lg:text-[10rem] font-medium leading-[0.9] tracking-tighter mb-12 text-dark">
+                    Evolving <br>
+                    <span class="text-accent italic">Digital</span> Brands.
+                </h1>
+                <div class="reveal flex flex-col md:flex-row md:items-end gap-12">
+                    <p class="max-w-md text-lg text-dark/60 leading-relaxed font-light">
+                        We are a design-led studio helping ambitious brands navigate the digital landscape through aesthetic precision and strategic thinking.
+                    </p>
+                    <a href="#works" class="group flex gap-4 items-center cursor-pointer">
+                        <div class="h-16 w-16 bg-accent rounded-full flex items-center justify-center text-white group-hover:scale-110 transition-transform duration-300">
+                            <i class="ph ph-arrow-down-right text-2xl group-hover:rotate-45 transition-transform duration-300"></i>
+                        </div>
+                        <span class="text-xs font-bold uppercase tracking-widest text-dark/40 group-hover:text-accent transition-colors">Explore our <br> Latest Works</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- Decorative blur -->
+        <div class="absolute -right-20 top-1/2 -translate-y-1/2 w-[50vw] h-[50vw] bg-accent/5 rounded-full blur-[120px] -z-0"></div>
+    </section>
+
+    <!-- WORKS SECTION -->
+    <section id="works" class="py-32 bg-white">
+        <div class="container-custom">
+            <div class="flex flex-col md:flex-row justify-start items-start mb-20 reveal">
+                <div>
+                    <span class="text-accent text-[12px] font-bold uppercase tracking-[0.3em] mb-4 block">Archive 2021—24</span>
+                    <h2 class="text-5xl md:text-6xl font-display italic tracking-tight">Latest Works</h2>
+                </div>
+                <div class="hidden md:block h-px flex-1 mx-20 bg-dark/5 mb-4"></div>
+                <p class="text-dark/40 mt-4 md:mt-0 max-w-xs text-left text-sm">A curation of recent digital products and brand systems.
+
+</p>
+            </div> 
+
+            <!-- Grid Container -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10" id="projects-container">
+                <!-- Projects Injected via JS -->
+            </div>
+
+            <div class="mt-12 flex justify-center reveal">
+                <a href="#contact" class="inline-flex items-center gap-3 bg-dark text-white px-6 py-3  font-bold uppercase tracking-widest text-xs hover:bg-accent transition-colors shadow-md">
+                    <span>Start your project</span>
+                    <i class="ph ph-arrow-right text-[18px] text-white"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES SECTION -->
+    <section id="services" class="py-32 bg-bg border-y border-dark/5">
+        <div class="container-custom">
+            <div class="max-w-3xl mb-24 reveal">
+                <span class="text-accent text-[12px] font-bold uppercase tracking-[0.3em] mb-4 block">Core Competencies</span>
+                <h2 class="text-5xl font-display italic leading-tight">We build digital systems that scale with your vision.</h2>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- UI/UX -->
+                <div class="reveal group">
+                    <div class="h-px w-full bg-dark/10 mb-8 group-hover:bg-accent transition-colors duration-500"></div>
+                    <span class="text-dark/20 font-bold mb-6 block">01</span>
+                    <h3 class="text-2xl font-display italic mb-4">Experience Design</h3>
+                    <p class="text-dark/50 text-sm leading-relaxed">End-to-end UX/UI design focusing on user psychology and intuitive navigation flows.</p>
+                </div>
+                <!-- Brand -->
+                <div class="reveal group">
+                    <div class="h-px w-full bg-dark/10 mb-8 group-hover:bg-accent transition-colors duration-500"></div>
+                    <span class="text-dark/20 font-bold mb-6 block">02</span>
+                    <h3 class="text-2xl font-display italic mb-4">Creative Direction</h3>
+                    <p class="text-dark/50 text-sm leading-relaxed">Developing unique visual languages that translate your brand values into digital assets.</p>
+                </div>
+                <!-- Tech -->
+                <div class="reveal group">
+                    <div class="h-px w-full bg-dark/10 mb-8 group-hover:bg-accent transition-colors duration-500"></div>
+                    <span class="text-dark/20 font-bold mb-6 block">03</span>
+                    <h3 class="text-2xl font-display italic mb-4">Development</h3>
+                    <p class="text-dark/50 text-sm leading-relaxed">Clean code implementations using modern stacks like React, Tailwind, and Next.js.</p>
+                </div>
+                <!-- Marketing -->
+                <div class="reveal group">
+                    <div class="h-px w-full bg-dark/10 mb-8 group-hover:bg-accent transition-colors duration-500"></div>
+                    <span class="text-dark/20 font-bold mb-6 block">04</span>
+                    <h3 class="text-2xl font-display italic mb-4">Digital Growth</h3>
+                    <p class="text-dark/50 text-sm leading-relaxed">Performance marketing and SEO strategies designed to maximize your digital ROI.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section id="about" class="py-40 bg-dark text-white relative overflow-hidden">
+        <div class="container-custom relative z-10">
+            <div class="grid lg:grid-cols-2 gap-20 items-center">
+                <div class="reveal">
+                    <h2 class="font-display italic text-5xl md:text-7xl leading-[1.1] mb-12">
+                        Minimalism <br> meets <span class="text-accent">Meaning.</span>
+                    </h2>
+                    <div class="flex gap-8 items-center">
+                        <p class="text-white/50 max-w-xs text-sm uppercase tracking-widest leading-loose">
+                            Based in Addis. <br> Operating Globally. <br> Est. 2020
+                        </p>
+                    </div>
+                </div>
+                <div class="reveal space-y-8 text-white/70 text-lg font-light leading-relaxed">
+                    <p>Bfkdesign operates at the intersection of culture and commerce. We believe that digital tools should be as beautiful as they are functional, stripping away the noise to find the core message.</p>
+                    <p>Our collaborative approach means we don't just work for you; we work with you to uncover the potential of your digital presence.</p>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="about-follower" aria-hidden="true"></div>
+        <!-- Abstract gradient -->
+        <div class="absolute -bottom-1/2 -left-1/4 w-full h-full bg-accent/10 blur-[150px] rounded-full"></div>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section id="contact" class="py-32 bg-white">
+        <div class="container-custom">
+            <div class="max-w-6xl mx-auto grid lg:grid-cols-2 gap-24">
+                <div class="reveal">
+                    <span class="text-accent text-[12px] font-bold uppercase tracking-[0.3em] mb-6 block">Contact Us</span>
+                    <h2 class="text-6xl font-display italic mb-8">Ready to start?</h2>
+                    <p class="text-dark/50 mb-12 text-lg">Tell us about your project or just say hi. We usually respond within 24 hours.</p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-4">
+                            <div class="h-10 w-10 bg-bg rounded-full flex items-center justify-center text-accent"><i class="ph ph-envelope"></i></div>
+                            <span class="font-medium">hello@bfkdesigns.com</span>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="h-10 w-10 bg-bg rounded-full flex items-center justify-center text-accent"><i class="ph ph-map-pin"></i></div>
+                            <span class="font-medium">Ethiopia, Addis Ababa</span>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="contact-form" class="reveal space-y-8">
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <label class="text-[10px] font-bold uppercase tracking-widest text-dark/30">Full Name</label>
+                            <input type="text" placeholder="John Doe" required class="form-input">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold uppercase tracking-widest text-dark/30">Email Address</label>
+                            <input type="email" placeholder="john@example.com" required class="form-input">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold uppercase tracking-widest text-dark/30">Project Details</label>
+                        <textarea rows="4" placeholder="Tell us about your goals..." required class="form-input resize-none"></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-dark text-white py-6 font-bold uppercase tracking-widest text-xs hover:bg-accent transition-all duration-300 shadow-xl shadow-dark/5">
+                        Send Inquiry
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="py-16 bg-bg border-t border-dark/5">
+        <div class="container-custom flex flex-col md:flex-row justify-between items-center gap-8">
+            <img src="/assets/black.png" alt="Bfkdesign logo" class="h-7 w-auto">
+            
+            <div class="flex gap-10 text-[10px] font-bold uppercase tracking-widest text-dark/40">
+                <a href="https://www.instagram.com/bfkdesign/" class="hover:text-accent transition-colors">Instagram</a>
+                <a href="https://www.linkedin.com/company/bfk-design/" class="hover:text-accent transition-colors">LinkedIn</a>
+                <a href="https://twitter.com/befikadu_sisay" class="hover:text-accent transition-colors">X</a>
+            </div>
+
+            <p class="text-dark/30 text-[10px] uppercase tracking-widest">
+                &copy; 2023 Bfkdesign. Precision In Every Pixel.
+            </p>
+        </div>
+    </footer>
+
+    <!-- PROJECT MODAL -->
+    <div id="project-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 md:p-8">
+        <div class="absolute inset-0 bg-dark/75 backdrop-blur-sm" onclick="closeModal()"></div>
+        
+        <div class="modal-content-wrapper bg-bg w-full max-w-6xl h-full max-h-[85vh] rounded-none overflow-hidden flex flex-col md:flex-row relative z-10 shadow-2xl">
+            <button class="absolute top-8 right-8 h-12 w-12 rgba(255,255,255,0.06) rounded-xl backdrop-blur-sm flex items-center justify-center  z-30 border-white hover:scale-110 transition-transform box-shadow: 0 6px 18px rgba(4, 3, 3, 0.06);" onclick="closeModal()">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <div class="flex-[1.5] bg-dark relative">
+                <div id="modal-slider-track" class="modal-slider h-full w-full overflow-hidden">
+                    <div class="slides h-full flex" aria-live="polite"></div>
+                </div>
+
+                <button id="slide-prev" class="prev-slide absolute left-4 top-1/2 -translate-y-1/2 z-20" onclick="prevSlide()" aria-label="Previous slide">
+                    <i data-lucide="chevron-left" class="w-5 h-5 text-white"></i>
+                </button>
+                <button id="slide-next" class="next-slide absolute right-4 top-1/2 -translate-y-1/2 z-20" onclick="nextSlide()" aria-label="Next slide">
+                    <i data-lucide="chevron-right" class="w-5 h-5 text-white"></i>
+                </button>
+
+                <div class="slider-controls absolute left-1/2 -translate-x-1/2 bottom-4 z-20">
+                    <div class="dots"></div>
+                </div>
+            </div>
+
+            <div class="flex-1 p-10 md:p-16 overflow-y-auto no-scrollbar">
+                <span id="modal-cat" class="text-accent text-[10px] font-bold uppercase tracking-[0.3em] mb-6 block">CATEGORY</span>
+                <h2 id="modal-title" class="text-4xl md:text-5xl font-display italic mb-8 leading-tight">Project Title</h2>
+                <p id="modal-desc" class="text-dark/60 leading-relaxed mb-12 text-lg font-light">Detailed project brief and outcome summary...</p>
+                
+                <div class="grid grid-cols-2 gap-y-10 border-t border-dark/5 pt-10">
+                    <div>
+                        <span class="text-dark/30 text-[10px] font-bold uppercase tracking-widest block mb-2">Client</span>
+                        <p id="modal-client" class="font-bold text-sm">Client Name</p>
+                    </div>
+                    <div>
+                        <span class="text-dark/30 text-[10px] font-bold uppercase tracking-widest block mb-2">Year</span>
+                        <p id="modal-year" class="font-bold text-sm">2024</p>
+                    </div>
+                    <div class="col-span-2">
+                        <span class="text-dark/30 text-[10px] font-bold uppercase tracking-widest block mb-2">Services Provided</span>
+                        <p id="modal-services" class="font-bold text-sm">UI/UX, Brand Strategy, Development</p>
+                    </div>
+                </div>
+
+                <!-- Stats / Metrics -->
+                <div id="modal-stats" class="modal-stats">
+                    <div class="stat">
+                        <div class="label">Duration</div>
+                        <div id="modal-duration" class="value">8 weeks</div>
+                    </div>
+                    <div class="stat">
+                        <div class="label">Team</div>
+                        <div id="modal-team" class="value">4</div>
+                    </div>
+                    <div class="stat">
+                        <div class="label">Impact</div>
+                        <div id="modal-impact" class="value">+24% conv.</div>
+                    </div>
+                    <div class="stat">
+                        <div class="label">Platform</div>
+                        <div id="modal-platform" class="value">Web</div>
+                    </div>
+                </div>
+                
+                <div class="mt-16 flex items-center gap-6">
+                    <a href="#contact" onclick="closeModal()" class="group flex items-center gap-4 text-xs font-bold uppercase tracking-widest">
+                        <span class="border-b border-dark pb-1 group-hover:text-accent group-hover:border-accent transition-all">Start your project</span>
+                        <i class="ph ph-arrow-right text-accent"></i>
+                    </a>
+
+                    <button id="next-project-btn" class="ml-auto next-project-btn text-xs font-bold uppercase tracking-widest" onclick="openNextProject()"><span class="inline-block">Next Project →</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Project Data
+        const projects = [
+            {
+                title: "Lenat Mobile App",
+                category: "Fintech",
+                client: "Lenat",
+                year: "2024",
+                services: "Product Design, UI/UX",
+                duration: "2 weeks",
+                team: "1",
+                impact: "+24% conversion",
+                platform: "Web",
+                image: "./assets/lenat.png",
+                images: [
+                    "./assets/lenat.png",
+                    "./assets/lenat.png",
+                    "./assets/lenat.png",
+                ],
+                desc: "A complete overhaul of a fintech dashboard focusing on data visualization and user retention metrics, with an emphasis on converting trial users into customers through clearer analytics and onboarding flows."
+            },
+            {
+                title: "Vanguard Studio",
+                category: "Architecture",
+                client: "Vanguard Partners",
+                year: "2023",
+                services: "Web Design, CMS",
+                duration: "6 weeks",
+                team: "3",
+                impact: "+18% engagement",
+                platform: "Web",
+                image: "./images/placeholder.png",
+                images: [
+                    "./images/placeholder.png",
+                    "./images/placeholder.png",
+                    "./images/placeholder.png"
+                ],
+                desc: "A minimal, high-performance portfolio for an international architecture firm focusing on speed and visual fidelity."
+            },
+            {
+                title: "Ethos Skincare",
+                category: "E-Commerce",
+                client: "Ethos Beauty",
+                year: "2024",
+                services: "Branding, Shopify",
+                duration: "10 weeks",
+                team: "4",
+                impact: "+32% AOV",
+                platform: "Shopify",
+                image: "./images/placeholder2.png",
+                images: [
+                    "./images/placeholder2.png",
+                    "./images/placeholder2.png",
+                    "./images/placeholder2.png"
+                ],
+                desc: "Reimagining the luxury skincare shopping experience with a headless Shopify setup and focused product storytelling."
+            },
+            {
+                title: "Nova Mobility",
+                category: "Tech Startup",
+                client: "Nova Systems",
+                year: "2023",
+                services: "App Design, Motion",
+                duration: "12 weeks",
+                team: "6",
+                impact: "+12% retention",
+                platform: "iOS / Android",
+                image: "./images/placeholder.png",
+                images: [
+                    "./images/placeholder.png",
+                    "./images/placeholder.png",
+                    "./images/placeholder.png"
+                ],
+                desc: "Developing the visual language and micro-interactions for a sustainable transit app to improve rider onboarding."
+            },
+            {
+                title: "Cura Health",
+                category: "Medical",
+                client: "Cura Group",
+                year: "2024",
+                services: "Identity, UX Design",
+                duration: "14 weeks",
+                team: "7",
+                impact: "+40% appointment bookings",
+                platform: "Web",
+                image: "./images/placeholder2.png",
+                images: [
+                    "./images/placeholder2.png",
+                    "./images/placeholder2.png",
+                    "./images/placeholder2.png"
+                ],
+                desc: "A patient-first portal that streamlines communication between doctors and clients and reduces no-shows."
+            },
+            {
+                title: "Prism Gallery",
+                category: "Art & Culture",
+                client: "Prism NYC",
+                year: "2023",
+                services: "Art Direction, Web",
+                duration: "5 weeks",
+                team: "2",
+                impact: "+40% visits",
+                platform: "Web",
+                image: "./images/placeholder.png",
+                images: [
+                    "./images/placeholder.png",
+                    "./images/placeholder.png",
+                    "./images/placeholder.png"
+                ],
+                desc: "A digital gallery space for exploring contemporary art through immersive exhibitions."
+            }
+        ];
+
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Render Projects Grid
+        const container = document.getElementById('projects-container');
+        projects.forEach((p, index) => {
+            const article = document.createElement('article');
+            article.className = 'reveal work-card relative aspect-[4/3] overflow-hidden cursor-pointer group';
+            article.onclick = () => openModal(index);
+            article.innerHTML = `
+                <img src="${p.image}" alt="${p.title}" class="project-card-img w-full h-full object-cover">
+                <div class="project-overlay absolute inset-0 p-8 text-white flex flex-col items-center justify-center text-center">
+                    <div>
+                        <h3 class="text-3xl font-display italic text-center">${p.title}</h3>
+                        <p class="text-white/70 mb-6 text-center">${p.category} &bull; ${p.year}</p>
+                        <div class="glass-view-btn inline-block px-6 py-3 text-xs font-bold uppercase tracking-widest rounded-full">
+                            View Case Study
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.appendChild(article);
+        });
+
+        // Modal Logic
+        let currentProjectIndex = 0;
+        let currentSlideIndex = 0;
+        let modalKeyHandler = null;
+
+        function buildSlides(images) {
+            const slides = document.querySelector('#modal-slider-track .slides');
+            slides.innerHTML = images.map(src => `\n                <div class="slide">\n                    <img src="${src}" alt="" />\n                </div>`).join('');
+            // Reset transform and dots
+            goToSlide(0);
+            buildDots(images.length);
+        }
+
+        function buildDots(n) {
+            const dots = document.querySelector('#project-modal .dots');
+            if (!dots) return;
+            dots.innerHTML = '';
+            for (let i = 0; i < n; i++) {
+                const d = document.createElement('button');
+                d.className = 'dot';
+                d.setAttribute('aria-label', `Go to slide ${i + 1}`);
+                d.onclick = () => goToSlide(i);
+                dots.appendChild(d);
+            }
+            updateActiveDot();
+        }
+
+        function updateActiveDot() {
+            const dots = document.querySelectorAll('#project-modal .dots .dot');
+            dots.forEach((d, i) => d.classList.toggle('active', i === currentSlideIndex));
+        }
+
+        // Enable simple touch/swipe support for mobile sliders
+        function enableSliderTouch() {
+            const track = document.querySelector('#modal-slider-track');
+            if (!track) return;
+            let startX = 0;
+            let endX = 0;
+            track.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+            track.addEventListener('touchmove', e => { endX = e.touches[0].clientX; }, { passive: true });
+            track.addEventListener('touchend', () => {
+                const dx = endX - startX;
+                if (Math.abs(dx) > 40) {
+                    if (dx < 0) nextSlide();
+                    else prevSlide();
+                }
+                startX = endX = 0;
+            }, { passive: true });
+        }
+
+        function goToSlide(i) {
+            const slides = document.querySelector('#modal-slider-track .slides');
+            if (!slides) return;
+            const count = slides.children.length;
+            currentSlideIndex = Math.max(0, Math.min(i, count - 1));
+            slides.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
+            updateActiveDot();
+        }
+
+        function prevSlide() {
+            const slides = document.querySelector('#modal-slider-track .slides');
+            const count = slides ? slides.children.length : 0;
+            if (count === 0) return;
+            if (currentSlideIndex > 0) currentSlideIndex--;
+            else currentSlideIndex = count - 1;
+            goToSlide(currentSlideIndex);
+        }
+
+        function nextSlide() {
+            const slides = document.querySelector('#modal-slider-track .slides');
+            const count = slides ? slides.children.length : 0;
+            if (count === 0) return;
+            if (currentSlideIndex < count - 1) currentSlideIndex++;
+            else currentSlideIndex = 0;
+            goToSlide(currentSlideIndex);
+        }
+
+        function openModal(index) {
+            currentProjectIndex = index;
+            currentSlideIndex = 0;
+            const p = projects[index];
+
+            // Populate Text
+            document.getElementById('modal-title').innerText = p.title;
+            document.getElementById('modal-cat').innerText = p.category;
+            document.getElementById('modal-desc').innerText = p.desc;
+            document.getElementById('modal-client').innerText = p.client;
+            document.getElementById('modal-year').innerText = p.year;
+            document.getElementById('modal-services').innerText = p.services;
+
+            // Populate Stats (if provided)
+            document.getElementById('modal-duration').innerText = p.duration || '';
+            document.getElementById('modal-team').innerText = p.team || '';
+            document.getElementById('modal-impact').innerText = p.impact || '';
+            document.getElementById('modal-platform').innerText = p.platform || '';
+
+            // Populate Slider
+            const images = p.images || [p.image];
+            buildSlides(images);
+            lucide.createIcons();
+
+            // Enable swipe on mobile and reset modal text scroll
+            enableSliderTouch();
+            const textPane = document.querySelector('#project-modal .modal-content-wrapper .flex-1');
+            if (textPane) textPane.scrollTop = 0;
+
+            const modal = document.getElementById('project-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+
+            // Keyboard handling
+            if (modalKeyHandler) {
+                document.removeEventListener('keydown', modalKeyHandler);
+                modalKeyHandler = null;
+            }
+            modalKeyHandler = (e) => {
+                if (e.key === 'ArrowLeft') prevSlide();
+                if (e.key === 'ArrowRight') nextSlide();
+                if (e.key === 'Escape') closeModal();
+                if (e.key && e.key.toLowerCase() === 'n') openNextProject();
+            };
+            document.addEventListener('keydown', modalKeyHandler);
+        }
+
+        // Wire up prev/next UI controls
+        document.getElementById('slide-next').onclick = () => nextSlide();
+        document.getElementById('slide-prev').onclick = () => prevSlide();
+
+        function openNextProject() {
+            let nextIndex = currentProjectIndex + 1;
+            if (nextIndex >= projects.length) nextIndex = 0;
+            openModal(nextIndex);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('project-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = 'auto';
+            if (modalKeyHandler) {
+                document.removeEventListener('keydown', modalKeyHandler);
+                modalKeyHandler = null;
+            }
+        }
+
+        // Scroll Reveal Observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Navigation UI Logic (Floating Glass Morph)
+        const navbar = document.getElementById('navbar');
+        const navContainer = document.getElementById('nav-container');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 80) {
+                navbar.classList.add('scrolled', 'shadow-2xl', 'shadow-dark/10');
+                navContainer.classList.add('h-14', 'md:h-16');
+                navContainer.classList.remove('h-16', 'md:h-20');
+            } else {
+                navbar.classList.remove('scrolled', 'shadow-2xl', 'shadow-dark/10');
+                navContainer.classList.add('h-16', 'md:h-20');
+                navContainer.classList.remove('h-14', 'md:h-16');
+            }
+
+            // Section Highlighting
+            const sections = ['home', 'works', 'services', 'about', 'contact'];
+            let current = '';
+            sections.forEach(section => {
+                const element = document.getElementById(section);
+                if (element && element.getBoundingClientRect().top <= 150) current = section;
+            });
+            // Apply active class to both desktop nav links and mobile links
+            document.querySelectorAll('.nav-link, .mobile-link').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) link.classList.add('active');
+            });
+        });
+
+        // Mobile Menu
+        const menuBtn = document.getElementById('menu-btn');
+        const menuClose = document.getElementById('menu-close');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        // Toggle function: opens/closes the mobile menu and updates button state
+        menuBtn.onclick = () => {
+            const isOpen = !mobileMenu.classList.contains('translate-x-full');
+            if (isOpen) {
+                mobileMenu.classList.add('translate-x-full');
+                menuBtn.classList.remove('open');
+                menuBtn.setAttribute('aria-expanded', 'false');
+            } else {
+                mobileMenu.classList.remove('translate-x-full');
+                menuBtn.classList.add('open');
+                menuBtn.setAttribute('aria-expanded', 'true');
+            }
+        };
+
+        // Close handlers ensure the button returns to the closed state
+        menuClose.onclick = () => {
+            mobileMenu.classList.add('translate-x-full');
+            menuBtn.classList.remove('open');
+            menuBtn.setAttribute('aria-expanded', 'false');
+        };
+        document.querySelectorAll('.mobile-link').forEach(link => {
+            link.onclick = () => {
+                mobileMenu.classList.add('translate-x-full');
+                menuBtn.classList.remove('open');
+                menuBtn.setAttribute('aria-expanded', 'false');
+            };
+        });
+
+        // About section cursor follower (smooth trailing dots) — updated: longer trail, starts on hover, faster
+        (function() {
+            const about = document.getElementById('about');
+            if (!about) return;
+            let container = about.querySelector('.about-follower');
+            if (!container) {
+                container = document.createElement('div');
+                container.className = 'about-follower';
+                container.setAttribute('aria-hidden','true');
+                about.appendChild(container);
+            }
+
+            const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+            if (prefersReduced) return;
+
+            const DOTS = 7; // longer trail
+            const dots = [];
+            for (let i = 0; i < DOTS; i++) {
+                const el = document.createElement('div');
+                el.className = 'about-dot';
+                container.appendChild(el);
+                dots.push({ el, x: 0, y: 0 });
+            }
+
+            let rect = about.getBoundingClientRect();
+            function updateRect() { rect = about.getBoundingClientRect(); }
+            window.addEventListener('resize', updateRect);
+
+            // world coords cursor
+            let clientX = rect.left + rect.width / 2;
+            let clientY = rect.top + rect.height / 2;
+
+            let active = false; // trail active only on hover
+
+            function show() {
+                active = true;
+                dots.forEach((d,i)=>{ d.el.style.opacity = '1'; });
+            }
+            function hide() {
+                active = false;
+                dots.forEach((d,i)=>{ d.el.style.opacity = '0'; });
+            }
+
+            function onPointer(x, y) {
+                clientX = x; clientY = y;
+            }
+
+            if (!isTouch) {
+                about.addEventListener('mouseenter', e => { updateRect(); show(); onPointer(e.clientX, e.clientY); }, { passive: true });
+                about.addEventListener('mousemove', e => { if (active) onPointer(e.clientX, e.clientY); }, { passive: true });
+                about.addEventListener('mouseleave', () => { hide(); });
+            } else {
+                about.addEventListener('touchstart', e => {
+                    const t = e.touches[0];
+                    updateRect();
+                    show();
+                    onPointer(t.clientX, t.clientY);
+                    setTimeout(hide, 700);
+                }, { passive: true });
+            }
+
+            // animation loop with lerp trailing — made faster for snappier follow
+            const lerp = (a, b, t) => a + (b - a) * t;
+            function animate() {
+                const targetX = clientX - rect.left;
+                const targetY = clientY - rect.top;
+                for (let i = 0; i < dots.length; i++) {
+                    const d = dots[i];
+                    const followTargetX = i === 0 ? targetX : dots[i - 1].x;
+                    const followTargetY = i === 0 ? targetY : dots[i - 1].y;
+                    // fast base speed for immediate response, slightly slower for trailing dots
+                    const speed = Math.max(0.06, 0.55 - i * 0.06); // e.g., 0.55,0.49,0.43...
+                    d.x = lerp(d.x, followTargetX, speed);
+                    d.y = lerp(d.y, followTargetY, speed);
+                    const scale = 1 - i * 0.10;
+                    d.el.style.transform = `translate3d(${d.x}px, ${d.y}px, 0) translate(-50%,-50%) scale(${scale})`;
+                    // control opacity based on active state
+                    d.el.style.opacity = active ? String(1 - i * 0.12) : '0';
+                }
+                requestAnimationFrame(animate);
+            }
+            // initialize positions
+            rect = about.getBoundingClientRect();
+            const startX = rect.width / 2;
+            const startY = rect.height / 2;
+            dots.forEach(d => { d.x = startX; d.y = startY; d.el.style.transform = `translate3d(${startX}px, ${startY}px, 0) translate(-50%,-50%)`; d.el.style.opacity = '0'; });
+            animate();
+        })();
+
+        // Contact Form Submission Simulation
+        document.getElementById('contact-form').onsubmit = (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            const originalText = btn.innerText;
+            btn.innerText = "Processing...";
+            btn.disabled = true;
+
+            setTimeout(() => {
+                btn.innerText = "Message Received!";
+                btn.classList.add('bg-accent');
+                e.target.reset();
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.classList.remove('bg-accent');
+                    btn.disabled = false;
+                }, 3000);
+            }, 1500);
+        };
+    </script>
+</body>
+</html>
