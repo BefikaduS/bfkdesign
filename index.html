@@ -39,6 +39,55 @@
             }
         }
     </script>
+    <script>
+        // Contact form submit handler (uses fetch to POST to Web3Forms and shows status)
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('contact-form');
+            const status = document.getElementById('form-status');
+
+            if (!form) return;
+
+            form.addEventListener('submit', async function (e) {
+                e.preventDefault();
+
+                // basic honeypot check
+                if (form.querySelector('input[name="botcheck"]').value) {
+                    return; // likely bot
+                }
+
+                status.className = 'text-center p-4 rounded-md text-sm';
+                status.textContent = 'Sending...';
+                status.classList.remove('hidden');
+
+                const data = new FormData(form);
+
+                try {
+                    const res = await fetch(form.action, {
+                        method: form.method,
+                        body: data,
+                    });
+
+                    if (res.ok) {
+                        status.classList.add('bg-accent/10', 'text-accent');
+                        status.textContent = 'Thanks! Your message has been sent. We will reply within 24 hours.';
+                        form.reset();
+                    } else {
+                        const json = await res.json().catch(() => ({}));
+                        status.classList.add('bg-red-50', 'text-red-600');
+                        status.textContent = json.message || 'There was an error sending your message. Please try again.';
+                    }
+                } catch (err) {
+                    status.classList.add('bg-red-50', 'text-red-600');
+                    status.textContent = 'Network error. Please try again later.';
+                }
+
+                // hide status after a delay
+                setTimeout(() => {
+                    status.classList.add('hidden');
+                }, 8000);
+            });
+        });
+    </script>
 
     <style>
         body {
@@ -529,21 +578,29 @@
                     </div>
                 </div>
 
-                <form id="contact-form" class="reveal space-y-8">
+                <form id="contact-form" action="https://api.web3forms.com/submit" method="POST" class="reveal space-y-8">
+                    <input type="hidden" name="access_key" value="1d33ce4e-8004-46e8-b7a1-9f6ab15e680b">
+                    <input type="hidden" name="subject" value="New inquiry from Bfkdesign website">
+                    <!-- honeypot field (bots will fill this) -->
+                    <input type="text" name="botcheck" style="display:none">
+
                     <div class="grid md:grid-cols-2 gap-8">
                         <div>
                             <label class="text-[10px] font-bold uppercase tracking-widest text-dark/30">Full Name</label>
-                            <input type="text" placeholder="John Doe" required class="form-input">
+                            <input type="text" name="name" placeholder="John Doe" required class="form-input">
                         </div>
                         <div>
                             <label class="text-[10px] font-bold uppercase tracking-widest text-dark/30">Email Address</label>
-                            <input type="email" placeholder="john@example.com" required class="form-input">
+                            <input type="email" name="email" placeholder="john@example.com" required class="form-input">
                         </div>
                     </div>
                     <div>
                         <label class="text-[10px] font-bold uppercase tracking-widest text-dark/30">Project Details</label>
-                        <textarea rows="4" placeholder="Tell us about your goals..." required class="form-input resize-none"></textarea>
+                        <textarea name="message" rows="4" placeholder="Tell us about your goals..." required class="form-input resize-none"></textarea>
                     </div>
+
+                    <div id="form-status" class="hidden text-center p-4 rounded-md"></div>
+
                     <button type="submit" class="w-full bg-dark text-white py-6 font-bold uppercase tracking-widest text-xs hover:bg-accent transition-all duration-300 shadow-xl shadow-dark/5">
                         Send Inquiry
                     </button>
