@@ -378,6 +378,31 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
+
+        /* Testimonials carousel styles */
+        .testimonials { padding-top: 3rem; padding-bottom: 3rem; display:block; }
+        .testimonials .testimonials-carousel { display:flex; align-items:center; gap:12px; justify-content:center; position:relative; }
+        .testimonials .viewport {
+            overflow:hidden;
+            width:100%; max-width:1100px; margin:0 auto; position:relative; padding:8px 0;
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%);
+            mask-image: linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%);
+        }
+        .testimonials .track { display:flex; gap:20px; align-items:stretch; padding:12px; will-change: transform; }
+        .testimonials .card { position:relative; scroll-snap-align:center; flex:0 0 min(360px, 80%); background: #fff; border-radius:12px; box-shadow:0 8px 28px rgba(4,3,3,0.06); padding:18px; display:flex; gap:14px; align-items:flex-start; transition:transform 0.28s ease, box-shadow 0.28s ease; overflow:visible; }
+        .testimonials .card:hover { transform:translateY(-6px); box-shadow:0 14px 36px rgba(4,3,3,0.08); }
+        .testimonials .card::before { content: ''; position: absolute; inset: -4px; border-radius:16px; border: 2px solid transparent; box-shadow: 0 0 0 rgba(0,0,0,0); transform: scale(0.85); opacity: 0; transition: transform 0.36s cubic-bezier(0.22,1,0.36,1), opacity 0.28s ease; pointer-events: none; }
+        .testimonials .card:hover::before, .testimonials .card:focus-within::before { transform: scale(1); opacity: 1; border-color: rgba(237,108,48,0.95); box-shadow: 0 10px 30px rgba(237,108,48,0.08); }
+        .testimonials .avatar { width:64px; height:64px; border-radius:9999px; object-fit:cover; flex:0 0 64px; }
+        .testimonials .name { font-weight:700; color:#040303; }
+        .testimonials .position { font-size:12px; color:rgba(4,3,3,0.45); margin-bottom:6px; }
+        .testimonials .comment { color:rgba(4,3,3,0.7); font-size:14px; line-height:1.5; }
+        .testimonials .t-btn { background:rgba(4,3,3,0.04); border:1px solid rgba(4,3,3,0.06); width:44px; height:44px; border-radius:9999px; display:flex; align-items:center; justify-content:center; font-size:20px; cursor:pointer; transition:transform 0.18s ease, background 0.18s; z-index:10; }
+        .testimonials .t-btn:hover { transform:translateY(-3px); background:rgba(4,3,3,0.06); }
+        @media (max-width: 640px) {
+            .testimonials .card { flex:0 0 82%; }
+            .testimonials .t-btn { display:none; }
+        }
     </style>
 </head>
 <body class="font-sans selection:bg-accent selection:text-white">
@@ -557,6 +582,71 @@
         <div class="absolute -bottom-1/2 -left-1/4 w-full h-full bg-accent/10 blur-[150px] rounded-full"></div>
     </section>
 
+    <!-- TESTIMONIALS SECTION -->
+    <section id="testimonials" class="testimonials bg-bg">
+        <div class="container-custom">
+            <div class="max-w-3xl mx-auto text-center reveal mb-8">
+                <span class="text-accent text-[12px] font-bold uppercase tracking-[0.3em] mb-4 block">Testimonials</span>
+                <h2 class="text-4xl font-display italic">What clients say</h2>
+            </div>
+
+            <div class="testimonials-carousel relative">
+                <button class="t-btn prev absolute left-2 top-1/2 -translate-y-1/2 md:left-6" aria-label="Previous testimonial">‹</button>
+
+                <div class="viewport no-scrollbar">
+                    <div class="track">
+                        <div class="card">
+                            <img src="./images/placeholder.png" alt="Alemayehu" class="avatar">
+                            <div>
+                                <div class="name">Alemayehu Bekele</div>
+                                <div class="position">CEO, Nova Mobility</div>
+                                <p class="comment">Bfkdesign redefined our onboarding experience — clean thinking and fast execution. Our retention improved noticeably within weeks.</p>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <img src="./images/placeholder2.png" alt="Sara" class="avatar">
+                            <div>
+                                <div class="name">Sara Tesfaye</div>
+                                <div class="position">Head of Product, Lenat</div>
+                                <p class="comment">The team's attention to detail and visual language helped our product feel premium. Smooth collaboration and clear deliverables.</p>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <img src="./images/placeholder.png" alt="Daniel" class="avatar">
+                            <div>
+                                <div class="name">Daniel K.</div>
+                                <div class="position">Founder, Ethos Beauty</div>
+                                <p class="comment">A thoughtful redesign that increased our average order value. Minimal, elegant, and conversion-focused.</p>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <img src="./images/placeholder2.png" alt="Martha" class="avatar">
+                            <div>
+                                <div class="name">Martha Hailu</div>
+                                <div class="position">Director, ArtFlow</div>
+                                <p class="comment">The rebranding completely transformed our market positioning. The team understood our core values immediately.</p>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <img src="./images/placeholder.png" alt="Robel" class="avatar">
+                            <div>
+                                <div class="name">Robel Tadesse</div>
+                                <div class="position">CTO, TechHub</div>
+                                <p class="comment">Exceptional code quality and delivery speed. The new platform handles our traffic spikes effortlessly.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="t-btn next absolute right-2 top-1/2 -translate-y-1/2 md:right-6" aria-label="Next testimonial">›</button>
+            </div>
+        </div>
+    </section>
+
     <!-- CONTACT SECTION -->
     <section id="contact" class="py-32 bg-white">
         <div class="container-custom">
@@ -712,11 +802,11 @@
             {
                 title: "Lenat Mobile App",
                 category: "Fintech",
+                duration: "2 weeks",
+                team: "1",
                 client: "Lenat",
                 year: "2024",
                 services: "Product Design, UI/UX",
-                duration: "2 weeks",
-                team: "1",
                 impact: "+24% conversion",
                 platform: "Web",
                 image: "./assets/lenat.png",
@@ -730,11 +820,11 @@
             {
                 title: "Vanguard Studio",
                 category: "Architecture",
+                duration: "2 weeks",
+                team: "1",
                 client: "Vanguard Partners",
                 year: "2023",
                 services: "Web Design, CMS",
-                duration: "6 weeks",
-                team: "3",
                 impact: "+18% engagement",
                 platform: "Web",
                 image: "./images/placeholder.png",
@@ -748,11 +838,11 @@
             {
                 title: "Ethos Skincare",
                 category: "E-Commerce",
+                duration: "2 weeks",
+                team: "1",
                 client: "Ethos Beauty",
                 year: "2024",
                 services: "Branding, Shopify",
-                duration: "10 weeks",
-                team: "4",
                 impact: "+32% AOV",
                 platform: "Shopify",
                 image: "./images/placeholder2.png",
@@ -766,11 +856,11 @@
             {
                 title: "Nova Mobility",
                 category: "Tech Startup",
+                duration: "2 weeks",
+                team: "1",
                 client: "Nova Systems",
                 year: "2023",
                 services: "App Design, Motion",
-                duration: "12 weeks",
-                team: "6",
                 impact: "+12% retention",
                 platform: "iOS / Android",
                 image: "./images/placeholder.png",
@@ -784,11 +874,11 @@
             {
                 title: "Cura Health",
                 category: "Medical",
+                duration: "2 weeks",
+                team: "1",
                 client: "Cura Group",
                 year: "2024",
                 services: "Identity, UX Design",
-                duration: "14 weeks",
-                team: "7",
                 impact: "+40% appointment bookings",
                 platform: "Web",
                 image: "./images/placeholder2.png",
@@ -802,11 +892,11 @@
             {
                 title: "Prism Gallery",
                 category: "Art & Culture",
+                duration: "2 weeks",
+                team: "1",
                 client: "Prism NYC",
                 year: "2023",
                 services: "Art Direction, Web",
-                duration: "5 weeks",
-                team: "2",
                 impact: "+40% visits",
                 platform: "Web",
                 image: "./images/placeholder.png",
@@ -1150,6 +1240,133 @@
             const startY = rect.height / 2;
             dots.forEach(d => { d.x = startX; d.y = startY; d.el.style.transform = `translate3d(${startX}px, ${startY}px, 0) translate(-50%,-50%)`; d.el.style.opacity = '0'; });
             animate();
+        })();
+
+        // Testimonials carousel: auto-slide, pause on hover, buttons, responsive centering
+        (function() {
+            const carousel = document.getElementById('testimonials');
+            if (!carousel) return;
+
+            const viewport = carousel.querySelector('.viewport');
+            const track = carousel.querySelector('.track');
+            const btnPrev = carousel.querySelector('.t-btn.prev');
+            const btnNext = carousel.querySelector('.t-btn.next');
+            
+            if (!viewport || !track) return;
+            
+            const originalCards = Array.from(carousel.querySelectorAll('.card'));
+            if (originalCards.length === 0) return;
+
+            // Clone 2 cards on each side for robust infinite looping
+            const clonesStart = [
+                originalCards[originalCards.length - 2].cloneNode(true),
+                originalCards[originalCards.length - 1].cloneNode(true)
+            ];
+            const clonesEnd = [
+                originalCards[0].cloneNode(true),
+                originalCards[1].cloneNode(true)
+            ];
+            
+            clonesStart.forEach(c => track.insertBefore(c, track.firstChild));
+            clonesEnd.forEach(c => track.appendChild(c));
+
+            const cards = Array.from(carousel.querySelectorAll('.card'));
+            
+            // Start at index 2 (first real card)
+            let current = 2;
+            const delay = 3000;
+            let timer = null;
+            let isTransitioning = false;
+
+            function center(index, animate = true) {
+                const card = cards[index];
+                if (!card) return;
+                
+                // Calculate position to center the card
+                const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+                const viewportCenter = viewport.offsetWidth / 2;
+                const offset = -(cardCenter - viewportCenter);
+
+                track.style.transition = animate ? 'transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1)' : 'none';
+                track.style.transform = `translateX(${offset}px)`;
+                current = index;
+            }
+
+            // Initial positioning
+            setTimeout(() => center(2, false), 50);
+
+            // Handle infinite loop reset
+            track.addEventListener('transitionend', (e) => {
+                if (e.target !== track) return;
+                
+                isTransitioning = false;
+                const total = cards.length;
+                
+                if (current >= total - 2) {
+                    center(2 + (current - (total - 2)), false);
+                } else if (current <= 1) {
+                    center(total - 3 - (1 - current), false);
+                }
+            });
+
+            function next() {
+                if (isTransitioning) return;
+                isTransitioning = true;
+                center(current + 1, true);
+            }
+
+            function prev() {
+                if (isTransitioning) return;
+                isTransitioning = true;
+                center(current - 1, true);
+            }
+
+            function start() { stop(); timer = setInterval(next, delay); }
+            function stop() { if (timer) { clearInterval(timer); timer = null; } }
+
+            // Pause on hover/focus
+            [viewport, btnPrev, btnNext].forEach(el => {
+                if (!el) return;
+                el.addEventListener('mouseenter', stop);
+                el.addEventListener('mouseleave', start);
+            });
+
+            // Buttons
+            if (btnPrev) btnPrev.addEventListener('click', () => { prev(); stop(); start(); });
+            if (btnNext) btnNext.addEventListener('click', () => { next(); stop(); start(); });
+
+            // Touch / Swipe Support
+            let startX = 0, startTransform = 0, isDragging = false;
+            viewport.addEventListener('touchstart', e => {
+                stop();
+                isDragging = true;
+                startX = e.touches[0].clientX;
+                const style = window.getComputedStyle(track);
+                const matrix = new DOMMatrix(style.transform);
+                startTransform = matrix.m41;
+                track.style.transition = 'none';
+            }, { passive: true });
+
+            viewport.addEventListener('touchmove', e => {
+                if (!isDragging) return;
+                const diff = e.touches[0].clientX - startX;
+                track.style.transform = `translateX(${startTransform + diff}px)`;
+            }, { passive: true });
+
+            viewport.addEventListener('touchend', e => {
+                if (!isDragging) return;
+                isDragging = false;
+                const diff = e.changedTouches[0].clientX - startX;
+                if (Math.abs(diff) > 50) {
+                    if (diff > 0) prev(); else next();
+                } else {
+                    center(current, true);
+                }
+                start();
+            }, { passive: true });
+
+            window.addEventListener('resize', () => center(current, false));
+            start();
         })();
 
         // Contact Form Submission Simulation
