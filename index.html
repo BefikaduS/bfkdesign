@@ -722,7 +722,7 @@
     <div id="project-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 md:p-8">
         <div class="absolute inset-0 bg-dark/75 backdrop-blur-sm" onclick="closeModal()"></div>
         
-        <div class="modal-content-wrapper bg-bg w-full max-w-6xl h-full max-h-[85vh] rounded-none overflow-hidden flex flex-col md:flex-row relative z-10 shadow-2xl">
+        <div class="modal-content-wrapper bg-bg w-full max-w-7xl h-full max-h-[85vh] rounded-none overflow-hidden flex flex-col md:flex-row relative z-10 shadow-2xl">
             <button class="absolute top-8 right-8 h-12 w-12 rgba(255,255,255,0.06) rounded-xl backdrop-blur-sm flex items-center justify-center  z-30 border-white hover:scale-110 transition-transform box-shadow: 0 6px 18px rgba(4, 3, 3, 0.06);" onclick="closeModal()">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
@@ -744,7 +744,7 @@
                 </div>
             </div>
 
-            <div class="flex-1 p-10 md:p-16 overflow-y-auto no-scrollbar">
+            <div class="flex-1 p-10 md:p-12 overflow-y-auto no-scrollbar">
                 <span id="modal-cat" class="text-accent text-[10px] font-bold uppercase tracking-[0.3em] mb-6 block">CATEGORY</span>
                 <h2 id="modal-title" class="text-4xl md:text-5xl font-display italic mb-8 leading-tight">Project Title</h2>
                 <p id="modal-desc" class="text-dark/60 leading-relaxed mb-12 text-lg font-light">Detailed project brief and outcome summary...</p>
@@ -779,8 +779,8 @@
                         <div id="modal-impact" class="value">+24% conv.</div>
                     </div>
                     <div class="stat">
-                        <div class="label">Platform</div>
-                        <div id="modal-platform" class="value">Web</div>
+                        <div class="label">tag</div>
+                        <div id="modal-tag" class="value">Web</div>
                     </div>
                 </div>
                 
@@ -801,75 +801,78 @@
         const projects = [
             {
                 title: "Lenat Mobile App",
-                category: "Fintech",
+                category: "HealthTech • Mobile App",
                 duration: "2 weeks",
                 team: "1",
                 client: "Lenat",
                 year: "2024",
                 services: "Product Design, UI/UX",
-                impact: "+24% conversion",
-                platform: "Web",
-                image: "./assets/lenat.png",
+                impact: "+58% increase in weekly active users",
+                tag: "iOS & Android Mobile App",
+                image: "./assets/lenat1.png",
                 images: [
-                    "./assets/lenat.png",
-                    "./assets/lenat.png",
-                    "./assets/lenat.png",
+                    "./assets/lenat1.png",
+                    "./assets/lenat1.png",
+                    "./assets/lenat1.png",
                 ],
-                desc: "A complete overhaul of a fintech dashboard focusing on data visualization and user retention metrics, with an emphasis on converting trial users into customers through clearer analytics and onboarding flows."
+                desc: "A user-centric mobile application built to support pregnant women with reliable guidance, product access, and daily pregnancy support. The platform centralized medical information, personalized tracking, and commerce tools, improving content engagement by 58% and app retention by 12%."
             },
             {
-                title: "Vanguard Studio",
-                category: "Architecture",
+                title: "Akiless Creative",
+                category: "Brand Design",
                 duration: "2 weeks",
                 team: "1",
-                client: "Vanguard Partners",
-                year: "2023",
-                services: "Web Design, CMS",
-                impact: "+18% engagement",
-                platform: "Web",
-                image: "./images/placeholder.png",
+                client: "Akiless Creative",
+                year: "2025",
+                services: "Brand Identity, Digital Brand Assets",
+                impact: "+60% increase in brand recognition",
+                tag: "Brand Design",
+                image: "/assets/Akiless1.png",
                 images: [
-                    "./images/placeholder.png",
-                    "./images/placeholder.png",
-                    "./images/placeholder.png"
+                    "/assets/Akiless4.png",
+                    "/assets/Akiless2.png",
+                    "/assets/Akiless3.png",
                 ],
-                desc: "A minimal, high-performance portfolio for an international architecture firm focusing on speed and visual fidelity."
+                desc: "We developed a complete brand identity for a multidisciplinary creative agency offering social media content, video production, and web and app development. The system unified diverse services under a single visual language, improved brand consistency across digital channels, and enabled scalable use across marketing, product, and client-facing materials."
             },
             {
-                title: "Ethos Skincare",
-                category: "E-Commerce",
-                duration: "2 weeks",
-                team: "1",
-                client: "Ethos Beauty",
-                year: "2024",
-                services: "Branding, Shopify",
-                impact: "+32% AOV",
-                platform: "Shopify",
-                image: "./images/placeholder2.png",
+                title: "Zingo Bingo",
+                category: "Gaming Platform • Telegram Bot",
+                duration: "7 Months",
+                team: "3",
+                client: "Zingo Bingo",
+                year: "2025",
+                services: "Logo Design & Brand Identity, Social Media Posts",
+                impact: "+60% growth in social media engagement",
+                tag: "Brand Development",
+                image: "./assets/zingo5.png",
                 images: [
-                    "./images/placeholder2.png",
-                    "./images/placeholder2.png",
-                    "./images/placeholder2.png"
+                    "./assets/zingo1.png",
+                    "./assets/zingo2.png",
+                    "./assets/zingo3.png",
+                    "./assets/zingo4.png",
+                    "./assets/zingo5.png"
                 ],
-                desc: "Reimagining the luxury skincare shopping experience with a headless Shopify setup and focused product storytelling."
+                desc: "A full-scale gaming platform built on Telegram to deliver fast, intuitive bingo gameplay at scale. The product unified admin control, player experience, and brand presence into one system, reducing friction and increasing engagement across sessions. The rollout supported sustained growth over a 6+ month design and iteration cycle."
             },
             {
-                title: "Nova Mobility",
-                category: "Tech Startup",
-                duration: "2 weeks",
+                title: "Bloom Gifts",
+                category: "Branding • Logo Design",
+                duration: "1 weeks",
                 team: "1",
-                client: "Nova Systems",
-                year: "2023",
-                services: "App Design, Motion",
-                impact: "+12% retention",
-                platform: "iOS / Android",
-                image: "./images/placeholder.png",
+                client: "Bloom Gifts",
+                year: "2025",
+                services: "Logo Design & Brand Identity",
+                impact: "+52% increase in brand recognition after identity rollout",
+                tag: "Brand Identity",
+                image: "./assets/bloom1.png",
                 images: [
-                    "./images/placeholder.png",
-                    "./images/placeholder.png",
-                    "./images/placeholder.png"
+                    "./assets/bloom1.png",
+                    "./assets/bloom2.png",
+                    "./assets/bloom3.png",
+                    "./assets/bloom4.png"
                 ],
-                desc: "Developing the visual language and micro-interactions for a sustainable transit app to improve rider onboarding."
+                desc: "A boutique brand identity created to position Bloom Gifts as a premium, emotionally driven gifting brand. The visual system clarified brand voice, improved memorability, and increased customer recognition by 52%, transforming small gestures into high-impact moments."
             },
             {
                 title: "Cura Health",
@@ -880,12 +883,12 @@
                 year: "2024",
                 services: "Identity, UX Design",
                 impact: "+40% appointment bookings",
-                platform: "Web",
-                image: "./images/placeholder2.png",
+                tag: "Web",
+                image: "./assets/milo.png",
                 images: [
-                    "./images/placeholder2.png",
-                    "./images/placeholder2.png",
-                    "./images/placeholder2.png"
+                    "./assets/afro.png",
+                    "./assets/afro2.png",
+                    "./assets/afro3.png"
                 ],
                 desc: "A patient-first portal that streamlines communication between doctors and clients and reduces no-shows."
             },
@@ -898,8 +901,8 @@
                 year: "2023",
                 services: "Art Direction, Web",
                 impact: "+40% visits",
-                platform: "Web",
-                image: "./images/placeholder.png",
+                tag: "Web",
+                image: "./assets/wegene1.png",
                 images: [
                     "./images/placeholder.png",
                     "./images/placeholder.png",
@@ -1027,7 +1030,7 @@
             document.getElementById('modal-duration').innerText = p.duration || '';
             document.getElementById('modal-team').innerText = p.team || '';
             document.getElementById('modal-impact').innerText = p.impact || '';
-            document.getElementById('modal-platform').innerText = p.platform || '';
+            document.getElementById('modal-tag').innerText = p.tag || '';
 
             // Populate Slider
             const images = p.images || [p.image];
