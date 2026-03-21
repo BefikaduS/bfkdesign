@@ -409,7 +409,7 @@
 
     <!-- NAVIGATION -->
     <header class="fixed left-1/2 -translate-x-1/2 w-[90%] max-w-7xl z-50 glass-nav rounded-full transition-all duration-500" id="navbar">
-        <div class="px-6 md:px-10 h-16 md:h-20 flex items-center justify-between transition-all duration-500" id="nav-container">
+        <div class="px-6 md:px-10 h-16 md:h-20  flex items-center justify-between transition-all duration-500" id="nav-container">
             <a href="#home" class="flex items-center gap-3">
                 <img src="./assets/black.png" alt="Bfkdesign logo" class="h-5 w-auto">
             </a>
@@ -458,7 +458,7 @@
     </div>
 
     <!-- HERO SECTION -->
-    <section id="home" class="md:min-h-screen flex items-center pt-36 relative overflow-hidden bg-bg">
+    <section id="home" class="md:min-h-screen flex items-center pt-36 pb-12 relative overflow-hidden bg-bg">
         <div class="container-custom relative z-10">
             <div class="max-w-5xl">
                 <div class="reveal mb-10">
@@ -485,7 +485,61 @@
         </div>
         <!-- Decorative blur -->
         <div class="absolute -right-20 top-1/2 -translate-y-1/2 w-[50vw] h-[50vw] bg-accent/5 rounded-full blur-[120px] -z-0"></div>
-    </section>
+
+        </section>
+
+        <!-- OUR CLIENTS SECTION -->
+        <section id="clients" class="pt-24 pb-0 bg-white">
+            <div class="container-custom">
+                <div class="max-w-3xl mx-auto text-center mb-12">
+                    <span class="text-accent text-[12px] font-bold uppercase tracking-[0.3em] mb-4 block">Previous Clients</span>
+                    <h2 class="text-4xl font-display italic">Brands We’ve Worked With</h2>
+                    <p class="mt-4 text-dark/50 text-lg max-w-2xl mx-auto">We’re proud to have partnered with a diverse range of forward-thinking brands and organizations. Here are some of the clients who trust us to elevate their digital presence.</p>
+                </div>
+                <div class="relative overflow-hidden">
+                    <div id="clients-carousel" class="flex items-center gap-16 py-8" style="will-change: transform;">
+                        <!-- Example client logos, replace src with real client images -->
+                        <img src="./assets/Quill.png" alt="Quill Communication" class="client-logo h-40 w-auto object-contain opacity-80 transition-all duration-500 grayscale hover:grayscale-0">
+                        <img src="./assets/Yango.png" alt="Yango" class="client-logo h-40 w-auto object-contain opacity-80 transition-all duration-500 grayscale hover:grayscale-0">
+                        <img src="./assets/Jomi.png" alt="Jomi Foods" class="client-logo h-40 w-auto object-contain opacity-80 transition-all duration-500 grayscale hover:grayscale-0">
+                        <img src="./assets/Orbit.png" alt="Orbit Electronics" class="client-logo h-40 w-auto object-contain opacity-80 transition-all duration-500 grayscale hover:grayscale-0">
+                        <img src="./assets/Nav.png" alt="Nav Building" class="client-logo h-40 w-auto object-contain opacity-80 transition-all duration-500 grayscale hover:grayscale-0">
+                        <img src="./assets/Zingo.png" alt="Zingo Bingo" class="client-logo h-40 w-auto object-contain opacity-80 transition-all duration-500 grayscale hover:grayscale-0">
+                        <img src="./assets/Bloom.png" alt="Bloom Gifts" class="client-logo h-40 w-auto object-contain opacity-80 transition-all duration-500 grayscale hover:grayscale-0">
+                        <img src="./assets/Akiless.png" alt="Akiless Creatives" class="client-logo h-40 w-auto object-contain opacity-80 transition-all duration-500 grayscale hover:grayscale-0">
+                        <img src="./assets/Ankelba.png" alt="Ankelba" class="client-logo h-40 w-auto object-contain opacity-80 transition-all duration-500 grayscale hover:grayscale-0">
+                        <img src="./assets/Manenet.png" alt="Manenet" class="client-logo h-40 w-auto object-contain opacity-80 transition-all duration-500 grayscale hover:grayscale-0">
+                        <!-- Repeat for infinite effect -->
+                    </div>
+                    <!-- Fading sides -->
+                    <div class="pointer-events-none absolute left-0 top-0 h-full w-32 bg-gradient-to-r from-white via-white/80 to-transparent z-10"></div>
+                    <div class="pointer-events-none absolute right-0 top-0 h-full w-32 bg-gradient-to-l from-white via-white/80 to-transparent z-10"></div>
+                </div>
+            </div>
+            <script>
+                // Infinite auto-scroll for clients carousel
+                document.addEventListener('DOMContentLoaded', function () {
+                    const carousel = document.getElementById('clients-carousel');
+                    if (!carousel) return;
+                    let scrollAmount = 0;
+                    let speed = 1.2; // px per frame
+                    let frame;
+                    // Duplicate children for infinite effect
+                    for (let i = 0; i < 2; i++) {
+                        carousel.innerHTML += carousel.innerHTML;
+                    }
+                    function animate() {
+                        scrollAmount += speed;
+                        if (scrollAmount >= carousel.scrollWidth / 2) {
+                            scrollAmount = 0;
+                        }
+                        carousel.style.transform = `translateX(${-scrollAmount}px)`;
+                        frame = requestAnimationFrame(animate);
+                    }
+                    animate();
+                });
+            </script>
+        </section>
 
     <!-- WORKS SECTION -->
     <section id="works" class="py-32 bg-white">
@@ -666,6 +720,14 @@
                         <div class="flex items-center gap-4">
                             <div class="h-10 w-10 bg-bg rounded-full flex items-center justify-center text-accent"><i class="ph ph-map-pin"></i></div>
                             <span class="font-medium">Ethiopia, Addis Ababa</span>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="h-10 w-10 bg-bg rounded-full flex items-center justify-center text-accent"><i class="ph ph-whatsapp-logo"></i></div>
+                            <a href="https://wa.me/251932255628" target="_blank" rel="noopener" class="font-medium hover:text-accent transition-colors">WhatsApp</a>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="h-10 w-10 bg-bg rounded-full flex items-center justify-center text-accent"><i class="ph ph-telegram-logo"></i></div>
+                            <a href="https://t.me/befikadusisay" target="_blank" rel="noopener" class="font-medium hover:text-accent transition-colors">Telegram</a>
                         </div>
                     </div>
                 </div>
