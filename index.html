@@ -88,8 +88,73 @@
             });
         });
     </script>
+    <script>
+        // Social Media Post Designs Slider Logic
+        document.addEventListener('DOMContentLoaded', function () {
+            // Infinite slider for both rows
+            document.querySelectorAll('.social-slider-row').forEach((slider) => {
+                let speed = 1.2;
+                let scrollAmount = 0;
+                let frame;
+                let paused = false;
+                // Duplicate children for infinite effect
+                slider.innerHTML += slider.innerHTML;
+                function animate() {
+                    if (!paused) {
+                        scrollAmount += speed;
+                        if (scrollAmount >= slider.scrollWidth / 2) scrollAmount = 0;
+                        slider.style.transform = `translateX(${-scrollAmount}px)`;
+                    }
+                    frame = requestAnimationFrame(animate);
+                }
+                animate();
+                slider.parentElement.addEventListener('mouseenter', () => { paused = true; });
+                slider.parentElement.addEventListener('mouseleave', () => { paused = false; });
+            });
+
+            // Modal logic with prev/next
+            const modal = document.getElementById('social-modal');
+            const modalImg = document.getElementById('modal-img');
+            const modalTag = document.getElementById('modal-tag');
+            const closeModal = document.getElementById('modal-close');
+            const prevBtn = document.getElementById('modal-prev');
+            const nextBtn = document.getElementById('modal-next');
+            const slides = Array.from(document.querySelectorAll('.social-slide'));
+            let currentIdx = 0;
+            function openModal(idx) {
+                currentIdx = idx;
+                const slide = slides[currentIdx];
+                modalImg.src = slide.querySelector('img').src;
+                modalTag.textContent = slide.dataset.tag;
+                modal.classList.remove('hidden');
+            }
+            slides.forEach((slide, idx) => {
+                slide.addEventListener('click', function () {
+                    openModal(idx);
+                });
+            });
+            closeModal.addEventListener('click', () => modal.classList.add('hidden'));
+            modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.add('hidden'); });
+            prevBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openModal((currentIdx - 1 + slides.length) % slides.length);
+            });
+            nextBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openModal((currentIdx + 1) % slides.length);
+            });
+        });
+    </script>
 
     <style>
+                /* Social Media Slider Fade Effect */
+                #social-posts .social-slide {
+                    aspect-ratio: 1/1;
+                    min-width: 15rem;
+                    min-height: 15rem;
+                    max-width: 15rem;
+                    max-height: 15rem;
+                }
         body {
             background-color: #f7f4ef;
             color: #040303;
@@ -492,17 +557,15 @@
         <section id="clients" class="pt-24 pb-0 bg-white">
             <div class="container-custom">
                 <div class="max-w-3xl mx-auto text-center mb-12">
-                    <span class="text-accent text-[12px] font-bold uppercase tracking-[0.3em] mb-4 block">Previous Clients</span>
-                    <h2 class="text-4xl font-display italic">Brands We’ve Worked With</h2>
+                    <span class="text-accent text-[12px] font-bold uppercase tracking-[0.3em] mb-4 block">Current Clients</span>
+                    <h2 class="text-4xl font-display italic">Brands We're Work With</h2>
                     <p class="mt-4 text-dark/50 text-lg max-w-2xl mx-auto">We’re proud to have partnered with a diverse range of forward-thinking brands and organizations. Here are some of the clients who trust us to elevate their digital presence.</p>
                 </div>
                 <div class="relative overflow-hidden">
                     <div id="clients-carousel" class="flex items-center gap-16 py-8" style="will-change: transform;">
                         <!-- Example client logos, replace src with real client images -->
                         <img src="./assets/Quill.png" alt="Quill Communication" class="client-logo h-40 w-auto object-contain opacity-80 transition-all duration-500 grayscale hover:grayscale-0">
-                        <img src="./assets/Yango.png" alt="Yango" class="client-logo h-40 w-auto object-contain opacity-80 transition-all duration-500 grayscale hover:grayscale-0">
                         <img src="./assets/Jomi.png" alt="Jomi Foods" class="client-logo h-40 w-auto object-contain opacity-80 transition-all duration-500 grayscale hover:grayscale-0">
-                        <img src="./assets/Orbit.png" alt="Orbit Electronics" class="client-logo h-40 w-auto object-contain opacity-80 transition-all duration-500 grayscale hover:grayscale-0">
                         <img src="./assets/Nav.png" alt="Nav Building" class="client-logo h-40 w-auto object-contain opacity-80 transition-all duration-500 grayscale hover:grayscale-0">
                         <img src="./assets/Zingo.png" alt="Zingo Bingo" class="client-logo h-40 w-auto object-contain opacity-80 transition-all duration-500 grayscale hover:grayscale-0">
                         <img src="./assets/Bloom.png" alt="Bloom Gifts" class="client-logo h-40 w-auto object-contain opacity-80 transition-all duration-500 grayscale hover:grayscale-0">
@@ -567,6 +630,113 @@
                 </a>
             </div>
         </div>
+    </section>
+
+    <!-- SOCIAL MEDIA POST DESIGNS SECTION -->
+    <section id="social-posts" class="py-32 bg-bg border-y border-dark/5">
+        <div class="container-custom">
+            <div class="flex flex-col md:flex-row justify-start items-start mb-20 reveal">
+                <div>
+                    <span class="text-accent text-[12px] font-bold uppercase tracking-[0.3em] mb-4 block">Social Media</span>
+                    <h2 class="text-5xl md:text-6xl font-display italic tracking-tight">Social Media Post Designs</h2>
+                </div>
+                <div class="hidden md:block h-px flex-1 mx-20 bg-dark/5 mb-4"></div>
+                <p class="text-dark/40 mt-4 md:mt-0 max-w-xs text-left text-sm">A showcase of creative social media post designs for various brands and campaigns.</p>
+            </div>
+            <div class="relative">
+                <!-- Slider Rows -->
+                <div class="flex flex-col gap-10">
+                    <!-- Top Row: Left to Right -->
+                    <div class="overflow-hidden group relative">
+                        <div class="flex gap-8 whitespace-nowrap social-slider-row" data-direction="ltr">
+                            <!-- 8 squares, all bloom1.png -->
+                            <div class="relative w-60 h-60 bg-white rounded-xl shadow-lg cursor-pointer social-slide" data-tag="Yenebet">
+                                <img src="./assets/1.png" alt="Social Post 1" class="w-full h-full object-cover">
+                                <span class="absolute bottom-3 left-3 bg-accent text-white text-xs px-3 py-1 rounded-full">Yenebet</span>
+                            </div>
+                            <div class="relative w-60 h-60 bg-white rounded-xl shadow-lg cursor-pointer social-slide" data-tag="Embwa">
+                                <img src="./assets/2.png" alt="Social Post 2" class="w-full h-full object-cover">
+                                <span class="absolute bottom-3 left-3 bg-accent text-white text-xs px-3 py-1 rounded-full">Embwa</span>
+                            </div>
+                            <div class="relative w-60 h-60 bg-white rounded-xl shadow-lg cursor-pointer social-slide" data-tag="Yenebet">
+                                <img src="./assets/3.png" alt="Social Post 3" class="w-full h-full object-cover">
+                                <span class="absolute bottom-3 left-3 bg-accent text-white text-xs px-3 py-1 rounded-full">Yenebet</span>
+                            </div>
+                            <div class="relative w-60 h-60 bg-white rounded-xl shadow-lg cursor-pointer social-slide" data-tag="Embwa">
+                                <img src="./assets/4.png" alt="Social Post 4" class="w-full h-full object-cover">
+                                <span class="absolute bottom-3 left-3 bg-accent text-white text-xs px-3 py-1 rounded-full">Embwa</span>
+                            </div>
+                            <div class="relative w-60 h-60 bg-white rounded-xl shadow-lg cursor-pointer social-slide" data-tag="Smile Dental Clinic">
+                                <img src="./assets/5.png" alt="Social Post 5" class="w-full h-full object-cover">
+                                <span class="absolute bottom-3 left-3 bg-accent text-white text-xs px-3 py-1 rounded-full">Smile Dental Clinic</span>
+                            </div>
+                            <div class="relative w-60 h-60 bg-white rounded-xl shadow-lg cursor-pointer social-slide" data-tag="Smile Dental Clinic">
+                                <img src="./assets/6.png" alt="Social Post 6" class="w-full h-full object-cover">
+                                <span class="absolute bottom-3 left-3 bg-accent text-white text-xs px-3 py-1 rounded-full">Smile Dental Clinic</span>
+                            </div>
+                            <div class="relative w-60 h-60 bg-white rounded-xl shadow-lg cursor-pointer social-slide" data-tag="Bloom Gifts">
+                                <img src="./assets/7.png" alt="Social Post 7" class="w-full h-full object-cover">
+                                <span class="absolute bottom-3 left-3 bg-accent text-white text-xs px-3 py-1 rounded-full">Bloom Gifts</span>
+                            </div>
+                            <div class="relative w-60 h-60 bg-white rounded-xl shadow-lg cursor-pointer social-slide" data-tag="Smile Dental Clinic">
+                                <img src="./assets/8.png" alt="Social Post 8" class="w-full h-full object-cover">
+                                <span class="absolute bottom-3 left-3 bg-accent text-white text-xs px-3 py-1 rounded-full">Smile Dental Clinic</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Bottom Row: Left to Right (second slide, same direction) -->
+                    <div class="overflow-hidden group relative">
+                        <div class="flex gap-8 whitespace-nowrap social-slider-row" data-direction="ltr">
+                            <!-- 8 squares, all bloom1.png -->
+                            <div class="relative w-60 h-60 bg-white rounded-xl shadow-lg cursor-pointer social-slide" data-tag="Smile Dental Clinic">
+                                <img src="./assets/9.png" alt="Social Post 9" class="w-full h-full object-cover">
+                                <span class="absolute bottom-3 left-3 bg-accent text-white text-xs px-3 py-1 rounded-full">Smile Dental Clinic</span>
+                            </div>
+                            <div class="relative w-60 h-60 bg-white rounded-xl shadow-lg cursor-pointer social-slide" data-tag="HabtamBet">
+                                <img src="./assets/10.png" alt="Social Post 10" class="w-full h-full object-cover">
+                                <span class="absolute bottom-3 left-3 bg-accent text-white text-xs px-3 py-1 rounded-full">HabtamBet</span>
+                            </div>
+                            <div class="relative w-60 h-60 bg-white rounded-xl shadow-lg cursor-pointer social-slide" data-tag="Lenat">
+                                <img src="./assets/11.png" alt="Social Post 11" class="w-full h-full object-cover">
+                                <span class="absolute bottom-3 left-3 bg-accent text-white text-xs px-3 py-1 rounded-full">Lenat</span>
+                            </div>
+                            <div class="relative w-60 h-60 bg-white rounded-xl shadow-lg cursor-pointer social-slide" data-tag="Template">
+                                <img src="./assets/12.png" alt="Social Post 12" class="w-full h-full object-cover">
+                                <span class="absolute bottom-3 left-3 bg-accent text-white text-xs px-3 py-1 rounded-full">Template</span>
+                            </div>
+                            <div class="relative w-60 h-60 bg-white rounded-xl shadow-lg cursor-pointer social-slide" data-tag="Smile Dental Clinic">
+                                <img src="./assets/13.png" alt="Social Post 13" class="w-full h-full object-cover">
+                                <span class="absolute bottom-3 left-3 bg-accent text-white text-xs px-3 py-1 rounded-full">Smile Dental Clinic</span>
+                            </div>
+                            <div class="relative w-60 h-60 bg-white rounded-xl shadow-lg cursor-pointer social-slide" data-tag="Embwa">
+                                <img src="./assets/16.png" alt="Social Post 14" class="w-full h-full object-cover">
+                                <span class="absolute bottom-3 left-3 bg-accent text-white text-xs px-3 py-1 rounded-full">Embwa</span>
+                            </div>
+                            <div class="relative w-60 h-60 bg-white rounded-xl shadow-lg cursor-pointer social-slide" data-tag="Jomi Foods">
+                                <img src="./assets/17.png" alt="Social Post 15" class="w-full h-full object-cover">
+                                <span class="absolute bottom-3 left-3 bg-accent text-white text-xs px-3 py-1 rounded-full">Jomi Foods</span>
+                            </div>
+                            <div class="relative w-60 h-60 bg-white rounded-xl shadow-lg cursor-pointer social-slide" data-tag="Smile Dental Clinic">
+                                <img src="./assets/21.png" alt="Social Post 16" class="w-full h-full object-cover">
+                                <span class="absolute bottom-3 left-3 bg-accent text-white text-xs px-3 py-1 rounded-full">Smile Dental Clinic</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Popup -->
+            <div id="social-modal" class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 hidden">
+                <div class="bg-white rounded-xl shadow-2xl w-full max-w-xl aspect-square p-2 sm:p-4 relative flex flex-col items-center justify-center">
+                    <button id="modal-close" class="absolute top-3 right-3 text-dark hover:text-accent text-2xl z-20"><i class="ph ph-x"></i></button>
+                    <button id="modal-prev" class="absolute left-1 top-1/2 -translate-y-1/2 bg-dark/70 hover:bg-accent text-white rounded-full p-2 sm:p-3 z-10"><i class="ph ph-caret-left text-2xl"></i></button>
+                    <button id="modal-next" class="absolute right-2 top-1/2 -translate-y-1/2 bg-dark/70 hover:bg-accent text-white rounded-full p-2 sm:p-3 z-10"><i class="ph ph-caret-right text-2xl"></i></button>
+                    <img id="modal-img" src="" alt="Social Post" class="w-full h-full object-cover rounded-lg mb-2 sm:mb-4 aspect-square">
+                    <div class="flex items-center justify-between w-full px-2 sm:px-4">
+                        <span id="modal-tag" class="bg-accent text-white text-xs px-3 py-1 rounded-full"></span>
+                    </div>
+                </div>
+            </div>
     </section>
 
     <!-- SERVICES SECTION -->
@@ -989,7 +1159,7 @@
                     <div>
                         <h3 class="text-3xl font-display italic text-center">${p.title}</h3>
                         <p class="text-white/70 mb-6 text-center">${p.category} &bull; ${p.year}</p>
-                        <div class="glass-view-btn inline-block px-6 py-3 text-xs font-bold uppercase tracking-widest rounded-full">
+                        <div class="glass-view-btn inline-block px-6 py-3 text-xs font-bold uppercase tracking-widest">
                             View Case Study
                         </div>
                     </div>
