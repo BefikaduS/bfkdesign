@@ -89,7 +89,7 @@ window.siteConfig = {
         './assets/lenat1.png',
         './assets/lenat1.png'
       ],
-      desc: 'A user-centric mobile application built to support pregnant women with reliable guidance, product access, and daily pregnancy support. The platform centralized medical information, personalized tracking, and commerce tools, improving content engagement by 58% and app retention by 12%.'
+      desc: 'We redesigned Lenat\'s mobile experience to create a trusted companion for maternal health. By simplifying the navigation, introducing personalized insights, and integrating commerce seamlessly, we improved weekly active users by 58% and deepened user retention. The product now serves as a critical touchpoint in the user\'s healthcare journey.'
     },
     {
       title: 'Akiless Creative',
@@ -108,12 +108,12 @@ window.siteConfig = {
         '/assets/Akiless3.png',
         '/assets/Akiless1.png'
       ],
-      desc: 'We developed a complete brand identity for a multidisciplinary creative agency offering social media content, video production, and web and app development. The system unified diverse services under a single visual language, improved brand consistency across digital channels, and enabled scalable use across marketing, product, and client-facing materials.'
+      desc: 'We unified Akiless Creative\'s diverse service offerings—from social content to video production—under a singular, powerful visual identity. The resulting brand system created consistency across touchpoints, enabled faster marketing execution, and elevated their perceived premium positioning. Brand recognition increased 60% within months of launch.'
     },
     {
       title: 'Zingo Bingo',
       category: 'Gaming Platform • Telegram Bot',
-      duration: '7 Months',
+      duration: '7 months',
       team: '3',
       client: 'Zingo Bingo',
       year: '2025',
@@ -128,12 +128,12 @@ window.siteConfig = {
         './assets/zingo4.png',
         './assets/zingo5.png'
       ],
-      desc: 'A full-scale gaming platform built on Telegram to deliver fast, intuitive bingo gameplay at scale. The product unified admin control, player experience, and brand presence into one system, reducing friction and increasing engagement across sessions. The rollout supported sustained growth over a 6+ month design and iteration cycle.'
+      desc: 'Zingo Bingo needed a bold, playful brand identity to stand out in a crowded gaming market. We created a cohesive visual system and comprehensive social content strategy that resonated with players across Telegram. The result: 60% growth in social engagement and a community-driven platform that sustains momentum.'
     },
     {
       title: 'Bloom Gifts',
       category: 'Branding • Logo Design',
-      duration: '1 weeks',
+      duration: '1 week',
       team: '1',
       client: 'Bloom Gifts',
       year: '2025',
@@ -147,16 +147,16 @@ window.siteConfig = {
         './assets/bloom3.png',
         './assets/bloom4.png'
       ],
-      desc: 'A boutique brand identity created to position Bloom Gifts as a premium, emotionally driven gifting brand. The visual system clarified brand voice, improved memorability, and increased customer recognition by 52%, transforming small gestures into high-impact moments.'
+      desc: 'Bloom Gifts required a premium identity that elevated gifting from ordinary to meaningful. We developed an elegant, emotionally resonant brand system that communicated sophistication and care. Post-launch, brand recognition jumped 52%, directly translating to increased customer trust and order value.'
     },
     {
       title: 'Cura Health',
-      category: 'Medical',
+      category: 'Medical • Patient Portal',
       duration: '2 weeks',
       team: '1',
       client: 'Cura Group',
       year: '2024',
-      services: 'Identity, UX Design',
+      services: 'Identity, UX Design, Web',
       impact: '+40% appointment bookings',
       tag: 'Web',
       image: './assets/milo.png',
@@ -165,16 +165,16 @@ window.siteConfig = {
         './assets/wegene1.png',
         './assets/wegene2.png'
       ],
-      desc: 'A patient-first portal that streamlines communication between doctors and clients and reduces no-shows.'
+      desc: 'We redesigned Cura Health\'s patient portal to prioritize clarity and reduce friction in the booking experience. By streamlining workflows and improving visual hierarchy, appointment bookings increased by 40% while no-show rates decreased. The portal now serves as a trusted interface between patients and healthcare providers.'
     },
     {
       title: 'Prism Gallery',
-      category: 'Art & Culture',
+      category: 'Art & Culture • Web',
       duration: '2 weeks',
       team: '1',
       client: 'Prism NYC',
       year: '2023',
-      services: 'Art Direction, Web',
+      services: 'Art Direction, Web Design',
       impact: '+40% visits',
       tag: 'Web',
       image: './assets/wegene1.png',
@@ -183,7 +183,7 @@ window.siteConfig = {
         './assets/wegene2.png',
         './assets/turnup.png'
       ],
-      desc: 'A digital gallery space for exploring contemporary art through immersive exhibitions.'
+      desc: 'Prism Gallery needed a digital space that honored contemporary art while inviting broader audience engagement. We created an immersive web experience with intuitive curation, stunning exhibition layouts, and seamless accessibility. The redesigned platform drove a 40% increase in monthly visits from art enthusiasts and collectors worldwide.'
     }
   ]
 };

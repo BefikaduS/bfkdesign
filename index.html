@@ -35,6 +35,29 @@
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
                         display: ['Playfair Display', 'serif'],
+                    },
+                    spacing: {
+                        'xs': '0.5rem',
+                        'sm': '1rem',
+                        'md': '1.5rem',
+                        'lg': '2rem',
+                        'xl': '2.5rem',
+                        '2xl': '3rem',
+                        '3xl': '3.5rem',
+                        '4xl': '4rem',
+                    },
+                    letterSpacing: {
+                        'tight': '-0.01em',
+                        'normal': '0em',
+                        'wide': '0.025em',
+                        'wider': '0.08em',
+                        'widest': '0.15em',
+                    },
+                    lineHeight: {
+                        'tight': '1.1',
+                        'normal': '1.5',
+                        'relaxed': '1.75',
+                        'loose': '2',
                     }
                 }
             }
@@ -357,20 +380,64 @@
         /* Project Cards Styling */
         .work-card {
             transition: all 0.5s ease;
+            aspect-ratio: 4/3;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
         }
         .project-card-img {
             transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         .work-card:hover .project-card-img {
             transform: scale(1.05);
         }
         .project-overlay {
-            background: rgba(4, 3, 3, 0.6);
+            background: linear-gradient(180deg, rgba(4,3,3,0.2) 0%, rgba(4,3,3,0.65) 60%, rgba(4,3,3,0.9) 100%);
             opacity: 0;
             transition: opacity 0.4s ease;
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 2rem;
         }
         .work-card:hover .project-overlay {
             opacity: 1;
+        }
+        .project-overlay h3 {
+            font-size: 1.875rem;
+            color: white;
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+        .project-overlay .meta {
+            color: rgba(255,255,255,0.75);
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+        .glass-view-btn {
+            align-self: flex-start;
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+        .glass-view-btn:hover {
+            background: rgba(255,255,255,0.18);
+            border-color: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
         }
         /* Slider Transition */
         .slider-track {
@@ -440,14 +507,53 @@
         .slider-controls { position: absolute; left: 50%; transform: translateX(-50%); bottom: 1rem; z-index: 20; }
 
         /* Next project button fill on hover */
-        .next-project-btn { background: transparent; border: 1px solid rgba(4,3,3,0.06); padding: 0.7rem 1rem; border-radius: 10px; transition: all 0.22s ease; }
-        .next-project-btn:hover { background: #ed6c30; color: white; border-color: transparent; box-shadow: 0 10px 30px rgba(237,108,48,0.18); transform: translateY(-3px); }
+        .next-project-btn { 
+            background: transparent; 
+            border: 1px solid rgba(4,3,3,0.08); 
+            padding: 0.875rem 1.5rem; 
+            border-radius: 8px; 
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            transition: all 0.3s ease; 
+        }
+        .next-project-btn:hover { 
+            background: #ed6c30; 
+            color: white; 
+            border-color: #ed6c30;
+            box-shadow: 0 12px 32px rgba(237,108,48,0.2); 
+            transform: translateY(-2px); 
+        }
 
         /* Modal stats cards */
-        .modal-stats { margin-top: 1rem; display: grid; grid-template-columns: repeat(2,1fr); gap: 0.75rem; }
-        .modal-stats .stat { background: rgba(4,3,3,0.02); padding: 0.75rem 1rem; border-radius: 8px; text-align: left; }
-        .modal-stats .stat .label { font-size: 10px; color: rgba(4,3,3,0.35); text-transform: uppercase; letter-spacing: 0.18em; }
-        .modal-stats .stat .value { font-weight: 700; margin-top: 0.25rem; }
+        .modal-stats { 
+            margin-top: 2.5rem; 
+            display: grid; 
+            grid-template-columns: repeat(2,1fr); 
+            gap: 1.5rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(4,3,3,0.06);
+        }
+        .modal-stats .stat { 
+            background: transparent;
+            padding: 0; 
+            text-align: left; 
+        }
+        .modal-stats .stat .label { 
+            font-size: 0.625rem; 
+            color: rgba(4,3,3,0.4); 
+            text-transform: uppercase; 
+            letter-spacing: 0.15em;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .modal-stats .stat .value { 
+            font-weight: 700; 
+            font-size: 1.125rem;
+            color: #040303;
+            line-height: 1.4;
+        }
 
         /* Responsive modal sizing */
         @media (max-width: 767px) {
@@ -624,26 +730,25 @@
     <!-- WORKS SECTION -->
     <section id="works" class="py-32 bg-white">
         <div class="container-custom">
-            <div class="flex flex-col md:flex-row justify-start items-start mb-20 reveal">
-                <div>
-                    <span class="text-accent text-[12px] font-bold uppercase tracking-[0.3em] mb-4 block">Archive 2021—24</span>
-                    <h2 class="text-5xl md:text-6xl font-display italic tracking-tight">Latest Works</h2>
+            <div class="grid lg:grid-cols-3 gap-16 items-start mb-24 reveal">
+                <div class="lg:col-span-2">
+                    <span class="text-accent text-[11px] font-bold uppercase tracking-[0.25em] mb-6 block">Archive 2021—24</span>
+                    <h2 class="text-5xl md:text-6xl font-display italic leading-tight">Latest Works</h2>
                 </div>
-                <div class="hidden md:block h-px flex-1 mx-20 bg-dark/5 mb-4"></div>
-                <p class="text-dark/40 mt-4 md:mt-0 max-w-xs text-left text-sm">A curation of recent digital products and brand systems.
-
-</p>
+                <div class="lg:col-span-1 pt-1">
+                    <p class="text-dark/45 text-sm leading-relaxed">A curation of recent digital products and brand systems that demonstrate strategic thinking and visual precision.</p>
+                </div>
             </div> 
 
             <!-- Grid Container -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10" id="projects-container">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="projects-container">
                 <!-- Projects Injected via JS -->
             </div>
 
-            <div class="mt-12 flex justify-center reveal">
-                <a href="#contact" class="inline-flex items-center gap-3 bg-dark text-white px-6 py-3  font-bold uppercase tracking-widest text-xs hover:bg-accent transition-colors shadow-md">
+            <div class="mt-16 flex justify-center reveal">
+                <a href="#contact" class="inline-flex items-center gap-3 bg-dark text-white px-8 py-4 font-bold uppercase tracking-[0.12em] text-xs hover:bg-accent transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-dark/10">
                     <span>Start your project</span>
-                    <i class="ph ph-arrow-right text-[18px] text-white"></i>
+                    <i class="ph ph-arrow-right text-[16px]"></i>
                 </a>
             </div>
         </div>
@@ -943,48 +1048,53 @@
                 </div>
             </div>
 
-            <div class="flex-1 p-10 md:p-12 overflow-y-auto no-scrollbar">
-                <span id="modal-cat" class="text-accent text-[10px] font-bold uppercase tracking-[0.3em] mb-6 block">CATEGORY</span>
-                <h2 id="modal-title" class="text-4xl md:text-5xl font-display italic mb-8 leading-tight">Project Title</h2>
-                <p id="modal-desc" class="text-dark/60 leading-relaxed mb-12 text-lg font-light">Detailed project brief and outcome summary...</p>
+            <div class="flex-1 p-12 md:p-14 overflow-y-auto no-scrollbar flex flex-col">
+                <span id="modal-cat" class="text-accent text-[11px] font-bold uppercase tracking-[0.25em] mb-8 block">Category</span>
+                <h2 id="modal-title" class="text-4xl md:text-5xl lg:text-6xl font-display italic mb-10 leading-[1.15]">Project Title</h2>
+                <p id="modal-desc" class="text-dark/55 leading-[1.75] mb-16 text-lg font-light max-w-2xl">Detailed project brief and outcome summary...</p>
                 
-                <div class="grid grid-cols-2 gap-y-10 border-t border-dark/5 pt-10">
-                    <div>
-                        <span class="text-dark/30 text-[10px] font-bold uppercase tracking-widest block mb-2">Client</span>
-                        <p id="modal-client" class="font-bold text-sm">Client Name</p>
+                <div class="space-y-12 pb-8">
+                    <!-- Project Metadata -->
+                    <div class="border-t border-dark/8 pt-10">
+                        <div class="grid grid-cols-2 gap-x-8 gap-y-12">
+                            <div>
+                                <span class="text-dark/35 text-[11px] font-bold uppercase tracking-[0.2em] block mb-3">Client</span>
+                                <p id="modal-client" class="font-semibold text-base text-dark">Client Name</p>
+                            </div>
+                            <div>
+                                <span class="text-dark/35 text-[11px] font-bold uppercase tracking-[0.2em] block mb-3">Year</span>
+                                <p id="modal-year" class="font-semibold text-base text-dark">2024</p>
+                            </div>
+                            <div class="col-span-2">
+                                <span class="text-dark/35 text-[11px] font-bold uppercase tracking-[0.2em] block mb-3">Services Provided</span>
+                                <p id="modal-services" class="font-semibold text-base text-dark leading-relaxed">UI/UX, Brand Strategy, Development</p>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <span class="text-dark/30 text-[10px] font-bold uppercase tracking-widest block mb-2">Year</span>
-                        <p id="modal-year" class="font-bold text-sm">2024</p>
-                    </div>
-                    <div class="col-span-2">
-                        <span class="text-dark/30 text-[10px] font-bold uppercase tracking-widest block mb-2">Services Provided</span>
-                        <p id="modal-services" class="font-bold text-sm">UI/UX, Brand Strategy, Development</p>
-                    </div>
-                </div>
 
-                <!-- Stats / Metrics -->
-                <div id="modal-stats" class="modal-stats">
-                    <div class="stat">
-                        <div class="label">Duration</div>
-                        <div id="modal-duration" class="value">8 weeks</div>
-                    </div>
-                    <div class="stat">
-                        <div class="label">Team</div>
-                        <div id="modal-team" class="value">4</div>
-                    </div>
-                    <div class="stat">
-                        <div class="label">Impact</div>
-                        <div id="modal-impact" class="value">+24% conv.</div>
-                    </div>
-                    <div class="stat">
-                        <div class="label">tag</div>
-                        <div id="modal-tag" class="value">Web</div>
+                    <!-- Stats / Metrics -->
+                    <div id="modal-stats" class="modal-stats">
+                        <div class="stat">
+                            <div class="label">Duration</div>
+                            <div id="modal-duration" class="value">8 weeks</div>
+                        </div>
+                        <div class="stat">
+                            <div class="label">Team</div>
+                            <div id="modal-team" class="value">4</div>
+                        </div>
+                        <div class="stat">
+                            <div class="label">Impact</div>
+                            <div id="modal-impact" class="value">+24% conv.</div>
+                        </div>
+                        <div class="stat">
+                            <div class="label">Type</div>
+                            <div id="modal-tag" class="value">Web</div>
+                        </div>
                     </div>
                 </div>
                 
-                <div class="mt-16 flex items-center gap-6">
-                    <a href="#contact" onclick="closeModal()" class="group flex items-center gap-4 text-xs font-bold uppercase tracking-widest">
+                <div class="mt-auto pt-8 border-t border-dark/8 flex items-center justify-between">
+                    <a href="#contact" onclick="closeModal()" class="group flex items-center gap-3 text-xs font-bold uppercase tracking-[0.12em]">
                         <span class="border-b border-dark pb-1 group-hover:text-accent group-hover:border-accent transition-all">Start your project</span>
                         <i class="ph ph-arrow-right text-accent"></i>
                     </a>
@@ -1100,18 +1210,14 @@
         if (container) {
             projects.forEach((p, index) => {
                 const article = document.createElement('article');
-                article.className = 'reveal work-card relative aspect-[4/3] overflow-hidden cursor-pointer group';
+                article.className = 'reveal work-card relative cursor-pointer group';
                 article.onclick = () => openModal(index);
                 article.innerHTML = `
-                    <img src="${p.image}" alt="${p.title}" class="project-card-img w-full h-full object-cover">
-                    <div class="project-overlay absolute inset-0 p-8 text-white flex flex-col items-center justify-center text-center">
-                        <div>
-                            <h3 class="text-3xl font-display italic text-center">${p.title}</h3>
-                            <p class="text-white/70 mb-6 text-center">${p.category} &bull; ${p.year}</p>
-                            <div class="glass-view-btn inline-block px-6 py-3 text-xs font-bold uppercase tracking-widest">
-                                View Case Study
-                            </div>
-                        </div>
+                    <img src="${p.image}" alt="${p.title}" class="project-card-img absolute inset-0 w-full h-full object-cover">
+                    <div class="project-overlay absolute inset-0 text-white flex flex-col justify-end">
+                        <h3 class="font-display italic">${p.title}</h3>
+                        <p class="meta">${p.category} • ${p.year}</p>
+                        <button class="glass-view-btn">View Case Study</button>
                     </div>
                 `;
                 container.appendChild(article);
