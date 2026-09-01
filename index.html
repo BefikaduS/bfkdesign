@@ -21,6 +21,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <script src="./site-config.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -40,7 +41,7 @@
         }
     </script>
     <script>
-        // Contact form submit handler (uses fetch to POST to Web3Forms and shows status)
+        // Contact form submit handler (posts to the local backend and shows status)
         document.addEventListener('DOMContentLoaded', function () {
             const form = document.getElementById('contact-form');
             const status = document.getElementById('form-status');
@@ -50,9 +51,8 @@
             form.addEventListener('submit', async function (e) {
                 e.preventDefault();
 
-                // basic honeypot check
                 if (form.querySelector('input[name="botcheck"]').value) {
-                    return; // likely bot
+                    return;
                 }
 
                 status.className = 'text-center p-4 rounded-md text-sm';
@@ -60,28 +60,30 @@
                 status.classList.remove('hidden');
 
                 const data = new FormData(form);
+                const encoded = new URLSearchParams(data).toString();
 
                 try {
                     const res = await fetch(form.action, {
                         method: form.method,
-                        body: data,
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+                        body: encoded,
                     });
+
+                    const json = await res.json().catch(() => ({}));
 
                     if (res.ok) {
                         status.classList.add('bg-accent/10', 'text-accent');
-                        status.textContent = 'Thanks! Your message has been sent. We will reply within 24 hours.';
+                        status.textContent = json.message || 'Thanks! Your message has been sent. We will reply within 24 hours.';
                         form.reset();
                     } else {
-                        const json = await res.json().catch(() => ({}));
                         status.classList.add('bg-red-50', 'text-red-600');
-                        status.textContent = json.message || 'There was an error sending your message. Please try again.';
+                        status.textContent = json.error || 'There was an error sending your message. Please try again.';
                     }
                 } catch (err) {
                     status.classList.add('bg-red-50', 'text-red-600');
                     status.textContent = 'Network error. Please try again later.';
                 }
 
-                // hide status after a delay
                 setTimeout(() => {
                     status.classList.add('hidden');
                 }, 8000);
@@ -506,13 +508,7 @@
                 <img src="./assets/black.png" alt="Bfkdesign logo" class="h-5 w-auto">
             </a>
 
-            <nav class="hidden md:flex items-center gap-8 text-[12px] font-bold uppercase tracking-[0.2em] text-dark/70">
-                <a href="#home" class="nav-link active">Home</a>
-                <a href="#works" class="nav-link">Works</a>
-                <a href="#services" class="nav-link">Services</a>
-                <a href="#about" class="nav-link">About</a>
-                <a href="#contact" class="nav-link">Contact</a>
-            </nav>
+            <nav class="hidden md:flex items-center gap-8 text-[12px] font-bold uppercase tracking-[0.2em] text-dark/70" id="desktop-nav"></nav>
 
             <div class="flex items-center gap-4">
                 <a href="#contact" class="hidden lg:block text-[10px] font-bold uppercase tracking-widest bg-dark text-white px-5 py-2.5 rounded-full hover:bg-accent transition-colors shadow-lg shadow-dark/5">Inquiry</a>
@@ -535,13 +531,7 @@
                 <i class="ph ph-x"></i>
             </button>
         </div>
-        <div class="flex flex-col gap-8">
-            <a href="#home" class="mobile-link text-3xl font-display italic text-white/40 hover:text-white transition-colors">Home</a>
-            <a href="#works" class="mobile-link text-3xl font-display italic text-white/40 hover:text-white transition-colors">Works</a>
-            <a href="#services" class="mobile-link text-3xl font-display italic text-white/40 hover:text-white transition-colors">Services</a>
-            <a href="#about" class="mobile-link text-3xl font-display italic text-white/40 hover:text-white transition-colors">About</a>
-            
-        </div>
+        <div class="flex flex-col gap-8" id="mobile-nav"></div>
         <div class="mt-auto border-t border-white/10 pt-8 flex gap-6 text-white/40 text-sm">
             <a href="#">Instagram</a>
             <a href="#">LinkedIn</a>
@@ -774,36 +764,7 @@
                 <h2 class="text-5xl font-display italic leading-tight">We build digital systems that scale with your vision.</h2>
             </div>
             
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <!-- UI/UX -->
-                <div class="reveal group">
-                    <div class="h-px w-full bg-dark/10 mb-8 group-hover:bg-accent transition-colors duration-500"></div>
-                    <span class="text-dark/20 font-bold mb-6 block">01</span>
-                    <h3 class="text-2xl font-display italic mb-4">Experience Design</h3>
-                    <p class="text-dark/50 text-sm leading-relaxed">End-to-end UX/UI design focusing on user psychology and intuitive navigation flows.</p>
-                </div>
-                <!-- Brand -->
-                <div class="reveal group">
-                    <div class="h-px w-full bg-dark/10 mb-8 group-hover:bg-accent transition-colors duration-500"></div>
-                    <span class="text-dark/20 font-bold mb-6 block">02</span>
-                    <h3 class="text-2xl font-display italic mb-4">Creative Direction</h3>
-                    <p class="text-dark/50 text-sm leading-relaxed">Developing unique visual languages that translate your brand values into digital assets.</p>
-                </div>
-                <!-- Tech -->
-                <div class="reveal group">
-                    <div class="h-px w-full bg-dark/10 mb-8 group-hover:bg-accent transition-colors duration-500"></div>
-                    <span class="text-dark/20 font-bold mb-6 block">03</span>
-                    <h3 class="text-2xl font-display italic mb-4">Development</h3>
-                    <p class="text-dark/50 text-sm leading-relaxed">Clean code implementations using modern stacks like React, Tailwind, and Next.js.</p>
-                </div>
-                <!-- Marketing -->
-                <div class="reveal group">
-                    <div class="h-px w-full bg-dark/10 mb-8 group-hover:bg-accent transition-colors duration-500"></div>
-                    <span class="text-dark/20 font-bold mb-6 block">04</span>
-                    <h3 class="text-2xl font-display italic mb-4">Digital Growth</h3>
-                    <p class="text-dark/50 text-sm leading-relaxed">Performance marketing and SEO strategies designed to maximize your digital ROI.</p>
-                </div>
-            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8" id="services-grid"></div>
         </div>
     </section>
 
@@ -849,7 +810,7 @@
                 <div class="viewport no-scrollbar">
                     <div class="track">
                         <div class="card">
-                            <img src="./images/placeholder.png" alt="Alemayehu" class="avatar">
+                            <img src="./images/Placeholder.png" alt="Alemayehu" class="avatar">
                             <div>
                                 <div class="name">Alemayehu Bekele</div>
                                 <div class="position">CEO, Nova Mobility</div>
@@ -858,7 +819,7 @@
                         </div>
 
                         <div class="card">
-                            <img src="./images/placeholder2.png" alt="Sara" class="avatar">
+                            <img src="./images/Placeholder2.png" alt="Sara" class="avatar">
                             <div>
                                 <div class="name">Sara Tesfaye</div>
                                 <div class="position">Head of Product, Lenat</div>
@@ -867,7 +828,7 @@
                         </div>
 
                         <div class="card">
-                            <img src="./images/placeholder.png" alt="Daniel" class="avatar">
+                            <img src="./images/Placeholder.png" alt="Daniel" class="avatar">
                             <div>
                                 <div class="name">Daniel K.</div>
                                 <div class="position">Founder, Ethos Beauty</div>
@@ -876,7 +837,7 @@
                         </div>
 
                         <div class="card">
-                            <img src="./images/placeholder2.png" alt="Martha" class="avatar">
+                            <img src="./images/Placeholder2.png" alt="Martha" class="avatar">
                             <div>
                                 <div class="name">Martha Hailu</div>
                                 <div class="position">Director, ArtFlow</div>
@@ -885,7 +846,7 @@
                         </div>
 
                         <div class="card">
-                            <img src="./images/placeholder.png" alt="Robel" class="avatar">
+                            <img src="./images/Placeholder.png" alt="Robel" class="avatar">
                             <div>
                                 <div class="name">Robel Tadesse</div>
                                 <div class="position">CTO, TechHub</div>
@@ -911,32 +872,11 @@
                     <h2 class="text-6xl font-display italic mb-8">Ready to start?</h2>
                     <p class="text-dark/50 mb-12 text-lg">Tell us about your project or just say hi. We usually respond within 24 hours.</p>
                     
-                    <div class="space-y-6">
-                        <div class="flex items-center gap-4">
-                            <div class="h-10 w-10 bg-bg rounded-full flex items-center justify-center text-accent"><i class="ph ph-envelope"></i></div>
-                            <a href="mailto:bfkdesignstudio@gmail.com">
-                            <span class="font-medium">bfkdesignstudio@gmail.com</span>
-                            </a>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <div class="h-10 w-10 bg-bg rounded-full flex items-center justify-center text-accent"><i class="ph ph-map-pin"></i></div>
-                            <span class="font-medium">Ethiopia, Addis Ababa</span>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <div class="h-10 w-10 bg-bg rounded-full flex items-center justify-center text-accent"><i class="ph ph-whatsapp-logo"></i></div>
-                            <a href="https://wa.me/251932255628" target="_blank" rel="noopener" class="font-medium hover:text-accent transition-colors">WhatsApp</a>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <div class="h-10 w-10 bg-bg rounded-full flex items-center justify-center text-accent"><i class="ph ph-telegram-logo"></i></div>
-                            <a href="https://t.me/befikadusisay" target="_blank" rel="noopener" class="font-medium hover:text-accent transition-colors">Telegram</a>
-                        </div>
-                    </div>
+                    <div class="space-y-6" id="contact-links"></div>
                 </div>
 
-                <form id="contact-form" action="https://api.web3forms.com/submit" method="POST" class="reveal space-y-8">
-                    <input type="hidden" name="access_key" value="1d33ce4e-8004-46e8-b7a1-9f6ab15e680b">
+                <form id="contact-form" action="/api/contact" method="POST" class="reveal space-y-8">
                     <input type="hidden" name="subject" value="New inquiry from Bfkdesign website">
-                    <!-- honeypot field (bots will fill this) -->
                     <input type="text" name="botcheck" style="display:none">
 
                     <div class="grid md:grid-cols-2 gap-8">
@@ -969,11 +909,7 @@
         <div class="container-custom flex flex-col md:flex-row justify-between items-center gap-8">
             <img src="/assets/black.png" alt="Bfkdesign logo" class="h-5 w-auto">
             
-            <div class="flex gap-10 text-[10px] font-bold uppercase tracking-widest text-dark/40">
-                <a href="https://www.instagram.com/bfkdesign/" class="hover:text-accent transition-colors">Instagram</a>
-                <a href="https://www.linkedin.com/company/bfk-design/" class="hover:text-accent transition-colors">LinkedIn</a>
-                <a href="https://twitter.com/befikadu_sisay" class="hover:text-accent transition-colors">X</a>
-            </div>
+            <div class="flex gap-10 text-[10px] font-bold uppercase tracking-widest text-dark/40" id="footer-links"></div>
 
             <p class="text-dark/30 text-[10px] uppercase tracking-widest">
                 &copy; 2026 Bfkdesign. Precision In Every Pixel.
@@ -1060,144 +996,127 @@
     </div>
 
     <script>
-        // Project Data
-        const projects = [
-            {
-                title: "Lenat Mobile App",
-                category: "HealthTech • Mobile App",
-                duration: "2 weeks",
-                team: "1",
-                client: "Lenat",
-                year: "2024",
-                services: "Product Design, UI/UX",
-                impact: "+58% increase in weekly active users",
-                tag: "iOS & Android Mobile App",
-                image: "./assets/lenat1.png",
-                images: [
-                    "./assets/lenat1.png",
-                    "./assets/lenat1.png",
-                    "./assets/lenat1.png",
-                ],
-                desc: "A user-centric mobile application built to support pregnant women with reliable guidance, product access, and daily pregnancy support. The platform centralized medical information, personalized tracking, and commerce tools, improving content engagement by 58% and app retention by 12%."
-            },
-            {
-                title: "Akiless Creative",
-                category: "Brand Design",
-                duration: "2 weeks",
-                team: "1",
-                client: "Akiless Creative",
-                year: "2025",
-                services: "Brand Identity, Digital Brand Assets",
-                impact: "+60% increase in brand recognition",
-                tag: "Brand Design",
-                image: "/assets/Akiless1.png",
-                images: [
-                    "/assets/Akiless4.png",
-                    "/assets/Akiless2.png",
-                    "/assets/Akiless3.png",
-                ],
-                desc: "We developed a complete brand identity for a multidisciplinary creative agency offering social media content, video production, and web and app development. The system unified diverse services under a single visual language, improved brand consistency across digital channels, and enabled scalable use across marketing, product, and client-facing materials."
-            },
-            {
-                title: "Zingo Bingo",
-                category: "Gaming Platform • Telegram Bot",
-                duration: "7 Months",
-                team: "3",
-                client: "Zingo Bingo",
-                year: "2025",
-                services: "Logo Design & Brand Identity, Social Media Posts",
-                impact: "+60% growth in social media engagement",
-                tag: "Brand Development",
-                image: "./assets/zingo5.png",
-                images: [
-                    "./assets/zingo1.png",
-                    "./assets/zingo2.png",
-                    "./assets/zingo3.png",
-                    "./assets/zingo4.png",
-                    "./assets/zingo5.png"
-                ],
-                desc: "A full-scale gaming platform built on Telegram to deliver fast, intuitive bingo gameplay at scale. The product unified admin control, player experience, and brand presence into one system, reducing friction and increasing engagement across sessions. The rollout supported sustained growth over a 6+ month design and iteration cycle."
-            },
-            {
-                title: "Bloom Gifts",
-                category: "Branding • Logo Design",
-                duration: "1 weeks",
-                team: "1",
-                client: "Bloom Gifts",
-                year: "2025",
-                services: "Logo Design & Brand Identity",
-                impact: "+52% increase in brand recognition after identity rollout",
-                tag: "Brand Identity",
-                image: "./assets/bloom1.png",
-                images: [
-                    "./assets/bloom1.png",
-                    "./assets/bloom2.png",
-                    "./assets/bloom3.png",
-                    "./assets/bloom4.png"
-                ],
-                desc: "A boutique brand identity created to position Bloom Gifts as a premium, emotionally driven gifting brand. The visual system clarified brand voice, improved memorability, and increased customer recognition by 52%, transforming small gestures into high-impact moments."
-            },
-            {
-                title: "Cura Health",
-                category: "Medical",
-                duration: "2 weeks",
-                team: "1",
-                client: "Cura Group",
-                year: "2024",
-                services: "Identity, UX Design",
-                impact: "+40% appointment bookings",
-                tag: "Web",
-                image: "./assets/milo.png",
-                images: [
-                    "./assets/afro.png",
-                    "./assets/afro2.png",
-                    "./assets/afro3.png"
-                ],
-                desc: "A patient-first portal that streamlines communication between doctors and clients and reduces no-shows."
-            },
-            {
-                title: "Prism Gallery",
-                category: "Art & Culture",
-                duration: "2 weeks",
-                team: "1",
-                client: "Prism NYC",
-                year: "2023",
-                services: "Art Direction, Web",
-                impact: "+40% visits",
-                tag: "Web",
-                image: "./assets/wegene1.png",
-                images: [
-                    "./images/placeholder.png",
-                    "./images/placeholder.png",
-                    "./images/placeholder.png"
-                ],
-                desc: "A digital gallery space for exploring contemporary art through immersive exhibitions."
-            }
+        // Centralized content configuration keeps text, images, and links easy to change without editing logic.
+        const site = window.siteConfig || {};
+        const projects = Array.isArray(site.projects) ? site.projects : [];
+        const services = Array.isArray(site.services) ? site.services : [];
+        const testimonials = Array.isArray(site.testimonials) ? site.testimonials : [];
+        const navLinks = Array.isArray(site.navLinks) ? site.navLinks : [];
+        const contactLinks = [
+            { icon: 'ph ph-envelope', label: site.site?.email || 'hello@domain.com', href: `mailto:${site.site?.email || 'hello@domain.com'}` },
+            { icon: 'ph ph-map-pin', label: site.site?.location || 'Your location', href: '#contact' },
+            { icon: 'ph ph-whatsapp-logo', label: 'WhatsApp', href: site.site?.whatsappUrl || '#' },
+            { icon: 'ph ph-telegram-logo', label: 'Telegram', href: site.site?.telegramUrl || '#' }
         ];
+        const footerLinks = [
+            { label: 'Instagram', href: site.site?.instagramUrl || '#' },
+            { label: 'LinkedIn', href: site.site?.linkedinUrl || '#' },
+            { label: 'X', href: site.site?.xUrl || '#' }
+        ];
+
+        function renderNavigation() {
+            const desktopNav = document.getElementById('desktop-nav');
+            const mobileNav = document.getElementById('mobile-nav');
+
+            if (desktopNav) {
+                desktopNav.innerHTML = navLinks.map((link, index) => {
+                    const isActive = index === 0 ? 'active' : '';
+                    return `<a href="${link.href}" class="nav-link ${isActive}">${link.label}</a>`;
+                }).join('');
+            }
+
+            if (mobileNav) {
+                mobileNav.innerHTML = navLinks.map((link, index) => {
+                    const isActive = index === 0 ? 'active' : '';
+                    return `<a href="${link.href}" class="mobile-link text-3xl font-display italic text-white/40 hover:text-white transition-colors ${isActive}">${link.label}</a>`;
+                }).join('');
+            }
+        }
+
+        function renderServices() {
+            const servicesGrid = document.getElementById('services-grid');
+            if (!servicesGrid) return;
+
+            servicesGrid.innerHTML = services.map(service => `
+                <div class="reveal group">
+                    <div class="h-px w-full bg-dark/10 mb-8 group-hover:bg-accent transition-colors duration-500"></div>
+                    <span class="text-dark/20 font-bold mb-6 block">${service.number}</span>
+                    <h3 class="text-2xl font-display italic mb-4">${service.title}</h3>
+                    <p class="text-dark/50 text-sm leading-relaxed">${service.description}</p>
+                </div>
+            `).join('');
+        }
+
+        function renderTestimonials() {
+            const track = document.getElementById('testimonials-track');
+            if (!track) return;
+
+            track.innerHTML = testimonials.map(item => `
+                <div class="card">
+                    <img src="${item.image}" alt="${item.name}" class="avatar">
+                    <div>
+                        <div class="name">${item.name}</div>
+                        <div class="position">${item.position}</div>
+                        <p class="comment">${item.comment}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderContactLinks() {
+            const target = document.getElementById('contact-links');
+            if (!target) return;
+
+            target.innerHTML = contactLinks.map(link => `
+                <div class="flex items-center gap-4">
+                    <div class="h-10 w-10 bg-bg rounded-full flex items-center justify-center text-accent"><i class="${link.icon}"></i></div>
+                    <a href="${link.href}" target="${link.href.startsWith('http') ? '_blank' : '_self'}" rel="noopener" class="font-medium hover:text-accent transition-colors">
+                        ${link.label}
+                    </a>
+                </div>
+            `).join('');
+        }
+
+        function renderFooterLinks() {
+            const target = document.getElementById('footer-links');
+            if (!target) return;
+
+            target.innerHTML = footerLinks.map(link => `
+                <a href="${link.href}" target="${link.href.startsWith('http') ? '_blank' : '_self'}" rel="noopener" class="hover:text-accent transition-colors">${link.label}</a>
+            `).join('');
+        }
 
         // Initialize Lucide Icons
         lucide.createIcons();
 
+        renderNavigation();
+        renderServices();
+        renderTestimonials();
+        renderContactLinks();
+        renderFooterLinks();
+
         // Render Projects Grid
         const container = document.getElementById('projects-container');
-        projects.forEach((p, index) => {
-            const article = document.createElement('article');
-            article.className = 'reveal work-card relative aspect-[4/3] overflow-hidden cursor-pointer group';
-            article.onclick = () => openModal(index);
-            article.innerHTML = `
-                <img src="${p.image}" alt="${p.title}" class="project-card-img w-full h-full object-cover">
-                <div class="project-overlay absolute inset-0 p-8 text-white flex flex-col items-center justify-center text-center">
-                    <div>
-                        <h3 class="text-3xl font-display italic text-center">${p.title}</h3>
-                        <p class="text-white/70 mb-6 text-center">${p.category} &bull; ${p.year}</p>
-                        <div class="glass-view-btn inline-block px-6 py-3 text-xs font-bold uppercase tracking-widest">
-                            View Case Study
+        if (container) {
+            projects.forEach((p, index) => {
+                const article = document.createElement('article');
+                article.className = 'reveal work-card relative aspect-[4/3] overflow-hidden cursor-pointer group';
+                article.onclick = () => openModal(index);
+                article.innerHTML = `
+                    <img src="${p.image}" alt="${p.title}" class="project-card-img w-full h-full object-cover">
+                    <div class="project-overlay absolute inset-0 p-8 text-white flex flex-col items-center justify-center text-center">
+                        <div>
+                            <h3 class="text-3xl font-display italic text-center">${p.title}</h3>
+                            <p class="text-white/70 mb-6 text-center">${p.category} &bull; ${p.year}</p>
+                            <div class="glass-view-btn inline-block px-6 py-3 text-xs font-bold uppercase tracking-widest">
+                                View Case Study
+                            </div>
                         </div>
                     </div>
-                </div>
-            `;
-            container.appendChild(article);
-        });
+                `;
+                container.appendChild(article);
+            });
+        }
 
         // Modal Logic
         let currentProjectIndex = 0;
@@ -1635,25 +1554,6 @@
             start();
         })();
 
-        // Contact Form Submission Simulation
-        document.getElementById('contact-form').onsubmit = (e) => {
-            e.preventDefault();
-            const btn = e.target.querySelector('button');
-            const originalText = btn.innerText;
-            btn.innerText = "Processing...";
-            btn.disabled = true;
-
-            setTimeout(() => {
-                btn.innerText = "Message Received!";
-                btn.classList.add('bg-accent');
-                e.target.reset();
-                setTimeout(() => {
-                    btn.innerText = originalText;
-                    btn.classList.remove('bg-accent');
-                    btn.disabled = false;
-                }, 3000);
-            }, 1500);
-        };
     </script>
 </body>
 </html>
