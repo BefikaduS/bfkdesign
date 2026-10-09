@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <script defer src="https://cloud.umami.is/script.js" data-website-id="4c83eff6-24c8-4cd9-a6f6-b01f1f68ab59"></script>
     <link rel="icon" type="image/png" href="/assets/favicon/favicon-96x96.png" sizes="96x96" />
@@ -17,6 +17,9 @@
     <!-- Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Lenis Smooth Scroll (120Hz) -->
+    <script src="./assets/lenis.min.js"></script>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -154,10 +157,12 @@
                 modalTag.textContent = slide.dataset.tag;
                 modal.classList.remove('hidden');
                 document.body.style.overflow = 'hidden';
+                if (window.lenis) window.lenis.stop();
             }
             function closeSocialModal() {
                 modal.classList.add('hidden');
                 document.body.style.overflow = '';
+                if (window.lenis) window.lenis.start();
             }
             function prevModal() {
                 openModal((currentIdx - 1 + slides.length) % slides.length);
@@ -338,44 +343,61 @@
             .pulse-badge { animation: none !important; }
         }
 
-        /* About section cursor follower */
+        /* Lenis 120Hz Smooth Scrolling */
+        html.lenis, html.lenis body {
+            height: auto;
+        }
+        .lenis.lenis-smooth {
+            scroll-behavior: auto !important;
+        }
+        .lenis.lenis-smooth [data-lenis-prevent] {
+            overscroll-behavior: contain;
+        }
+        .lenis.lenis-stopped {
+            overflow: hidden;
+        }
+        .lenis.lenis-scrolling iframe {
+            pointer-events: none;
+        }
+
+        /* About section cursor follower (Fluid 120Hz-ready glowing trail) */
         #about { position: relative; overflow: hidden; }
         .about-follower {
             position: absolute;
             inset: 0;
             pointer-events: none;
-            z-index: 0;
+            z-index: 1;
             overflow: visible;
+            opacity: 0;
+            transition: opacity 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .about-follower.is-active {
+            opacity: 1;
         }
         .about-follower .about-dot {
             position: absolute;
             left: 0;
             top: 0;
-            width: 360px;
-            height: 360px;
-            border-radius: 50%;
-            background: radial-gradient(circle at center, rgba(237,108,48,0.28) 0%, rgba(237,108,48,0.12) 30%, transparent 55%);
-            filter: blur(40px);
-            transform: translate(-50%,-50%) scale(0.9);
-            opacity: 0;
-            transition: opacity 0.28s linear;
-            will-change: transform, opacity;
+            width: 100px;
+            height: 100px;
+            border-radius: 3%;
+            background: radial-gradient(circle at center, rgba(237,108,48,0.28) 0%, rgba(237,108,48,0.14) 30%, rgba(237,108,48,0.04) 60%, transparent 80%);
+            filter: blur(8px);
+            transform: translate3d(-50%, -50%, 0);
+            will-change: transform;
             mix-blend-mode: screen;
             pointer-events: none;
         }
-        .about-follower .about-dot:nth-child(2) { width: 260px; height: 260px; filter: blur(36px); background: radial-gradient(circle at center, rgba(237,108,48,0.22) 0%, rgba(237,108,48,0.09) 30%, transparent 55%); }
-        .about-follower .about-dot:nth-child(3) { width: 160px; height: 160px; filter: blur(30px); background: radial-gradient(circle at center, rgba(237,108,48,0.18) 0%, rgba(237,108,48,0.08) 30%, transparent 55%); }
-        .about-follower .about-dot:nth-child(4) { width: 90px; height: 90px; filter: blur(20px); background: radial-gradient(circle at center, rgba(237,108,48,0.14) 0%, rgba(237,108,48,0.06) 30%, transparent 55%); }
 
         @media (max-width: 767px) {
-            .about-follower .about-dot { width: 220px; height: 220px; filter: blur(32px); }
-            .about-follower .about-dot:nth-child(2) { width: 160px; height: 160px; }
-            .about-follower .about-dot:nth-child(3) { width: 100px; height: 100px; }
-            .about-follower .about-dot:nth-child(4) { width: 60px; height: 60px; }
+            .about-follower .about-dot {
+                width: 38px;
+                height: 38px;
+                filter: blur(6px);
+            }
         }
         @media (prefers-reduced-motion: reduce) {
-            .about-follower { transition: none; }
-            .about-follower .about-dot { opacity: 0; transform: translate(-50%, -50%) scale(1); filter: blur(12px); }
+            .about-follower { display: none !important; }
         }
 
         /* Project Cards Styling */
@@ -397,14 +419,16 @@
             transform: scale(1.05);
         }
         .project-overlay {
-            background: linear-gradient(180deg, rgba(4,3,3,0.2) 0%, rgba(4,3,3,0.65) 60%, rgba(4,3,3,0.9) 100%);
+            background: linear-gradient(180deg, rgba(4,3,3,0.35) 0%, rgba(4,3,3,0.7) 50%, rgba(4,3,3,0.92) 100%);
             opacity: 0;
             transition: opacity 0.4s ease;
             position: absolute;
             inset: 0;
             display: flex;
             flex-direction: column;
-            justify-content: flex-end;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
             padding: 2rem;
         }
         .work-card:hover .project-overlay {
@@ -415,14 +439,16 @@
             color: white;
             margin-bottom: 0.5rem;
             line-height: 1.2;
+            text-align: center;
         }
         .project-overlay .meta {
             color: rgba(255,255,255,0.75);
             font-size: 0.875rem;
-            margin-bottom: 1rem;
+            margin-bottom: 1.25rem;
+            text-align: center;
         }
         .glass-view-btn {
-            align-self: flex-start;
+            align-self: center;
             background: rgba(255,255,255,0.12);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.2);
@@ -565,10 +591,27 @@
             .slider-controls { bottom: 12px; }
             .prev-slide, .next-slide { padding: 0.5rem; }
 
-            /* Make project overlay visible and readable on small screens */
-            .work-card .project-overlay { opacity: 1; background: linear-gradient(180deg, rgba(4,3,3,0.12), rgba(4,3,3,0.48)); justify-content: flex-end; text-align: left; padding: 1rem; }
-            .work-card .project-overlay h3 { font-size: 1.25rem; }
-            .work-card .glass-view-btn { display: inline-block; }
+            /* Make project overlay visible, readable, and middle centered on small screens */
+            .work-card .project-overlay {
+                opacity: 1;
+                background: linear-gradient(180deg, rgba(4,3,3,0.3) 0%, rgba(4,3,3,0.7) 100%);
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                padding: 1.5rem 1rem;
+            }
+            .work-card .project-overlay h3 {
+                font-size: 1.35rem;
+                text-align: center;
+            }
+            .work-card .project-overlay .meta {
+                text-align: center;
+                margin-bottom: 1rem;
+            }
+            .work-card .glass-view-btn {
+                align-self: center;
+                display: inline-block;
+            }
         }
 
         /* Hide scrollbar but keep functionality */
@@ -849,7 +892,7 @@
             </div>
 
             <!-- Modal Popup -->
-            <div id="social-modal" class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 hidden p-2 sm:p-4">
+            <div id="social-modal" class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 hidden p-2 sm:p-4" data-lenis-prevent>
                 <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md sm:max-w-xl aspect-square flex flex-col items-center justify-center overflow-hidden">
                     <button id="modal-close" class="absolute top-3 right-3 text-dark hover:text-accent text-2xl z-20"><i class="ph ph-x"></i></button>
                     <button id="modal-prev" class="absolute left-2 top-1/2 -translate-y-1/2 bg-dark/80 hover:bg-accent text-white rounded-full p-2 z-10"><i class="ph ph-caret-left text-xl"></i></button>
@@ -1024,7 +1067,7 @@
     </footer>
 
     <!-- PROJECT MODAL -->
-    <div id="project-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 md:p-8">
+    <div id="project-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 md:p-8" data-lenis-prevent>
         <div class="absolute inset-0 bg-dark/75 backdrop-blur-sm" onclick="closeModal()"></div>
         
         <div class="modal-content-wrapper bg-bg w-full max-w-7xl h-full max-h-[85vh] rounded-none overflow-hidden flex flex-col md:flex-row relative z-10 shadow-2xl">
@@ -1215,9 +1258,9 @@
                 article.onclick = () => openModal(index);
                 article.innerHTML = `
                     <img src="${p.image}" alt="${p.title}" class="project-card-img absolute inset-0 w-full h-full object-cover">
-                    <div class="project-overlay absolute inset-0 text-white flex flex-col justify-end">
-                        <h3 class="font-display italic">${p.title}</h3>
-                        <p class="meta">${p.category} • ${p.year}</p>
+                    <div class="project-overlay absolute inset-0 text-white flex flex-col justify-center items-center text-center p-6 md:p-8">
+                        <h3 class="font-display italic text-center">${p.title}</h3>
+                        <p class="meta text-center">${p.category} • ${p.year}</p>
                         <button class="glass-view-btn">View Case Study</button>
                     </div>
                 `;
@@ -1335,6 +1378,7 @@
             modal.classList.remove('hidden');
             modal.classList.add('flex');
             document.body.style.overflow = 'hidden';
+            if (window.lenis) window.lenis.stop();
 
             // Keyboard handling
             if (modalKeyHandler) {
@@ -1365,6 +1409,7 @@
             modal.classList.add('hidden');
             modal.classList.remove('flex');
             document.body.style.overflow = 'auto';
+            if (window.lenis) window.lenis.start();
             if (modalKeyHandler) {
                 document.removeEventListener('keydown', modalKeyHandler);
                 modalKeyHandler = null;
@@ -1444,7 +1489,11 @@
             };
         });
 
-        // About section cursor follower (smooth trailing dots) — updated: longer trail, starts on hover, faster
+        // About section cursor follower:
+        // - Refined, compact, buttery-soft glowing orb
+        // - Longer 26-dot fluid flowing ribbon trail
+        // - 1:1 direct tracking at the cursor head
+        // - Seamless tapering and 120Hz smooth interpolation
         (function() {
             const about = document.getElementById('about');
             if (!about) return;
@@ -1452,7 +1501,7 @@
             if (!container) {
                 container = document.createElement('div');
                 container.className = 'about-follower';
-                container.setAttribute('aria-hidden','true');
+                container.setAttribute('aria-hidden', 'true');
                 about.appendChild(container);
             }
 
@@ -1460,77 +1509,124 @@
             const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
             if (prefersReduced) return;
 
-            const DOTS = 7; // longer trail
+            const DOTS = 26; // Extended, silky long ribbon trail
             const dots = [];
+            container.innerHTML = '';
             for (let i = 0; i < DOTS; i++) {
                 const el = document.createElement('div');
                 el.className = 'about-dot';
+                
+                const progress = i / (DOTS - 1);
+                // Smooth tapering for a delicate needle-tail
+                const scale = Math.max(0.20, Math.pow(1 - progress * 0.82, 1.25));
+                const dotAlpha = Math.max(0.04, Math.pow(1 - progress * 0.92, 1.15) * 0.75);
+                el.style.opacity = dotAlpha.toFixed(3);
+
                 container.appendChild(el);
-                dots.push({ el, x: 0, y: 0 });
+                dots.push({ el, x: 0, y: 0, scale });
             }
 
             let rect = about.getBoundingClientRect();
-            function updateRect() { rect = about.getBoundingClientRect(); }
-            window.addEventListener('resize', updateRect);
+            function updateRect() { 
+                rect = about.getBoundingClientRect(); 
+            }
+            window.__aboutFollowerUpdateRect = updateRect;
+            window.addEventListener('resize', updateRect, { passive: true });
+            window.addEventListener('scroll', updateRect, { passive: true });
 
-            // world coords cursor
             let clientX = rect.left + rect.width / 2;
             let clientY = rect.top + rect.height / 2;
+            let targetX = rect.width / 2;
+            let targetY = rect.height / 2;
+            let isInside = false;
 
-            let active = false; // trail active only on hover
-
-            function show() {
-                active = true;
-                dots.forEach((d,i)=>{ d.el.style.opacity = '1'; });
-            }
-            function hide() {
-                active = false;
-                dots.forEach((d,i)=>{ d.el.style.opacity = '0'; });
-            }
-
-            function onPointer(x, y) {
-                clientX = x; clientY = y;
+            function updateTarget(x, y) {
+                clientX = x;
+                clientY = y;
+                targetX = clientX - rect.left;
+                targetY = clientY - rect.top;
             }
 
             if (!isTouch) {
-                about.addEventListener('mouseenter', e => { updateRect(); show(); onPointer(e.clientX, e.clientY); }, { passive: true });
-                about.addEventListener('mousemove', e => { if (active) onPointer(e.clientX, e.clientY); }, { passive: true });
-                about.addEventListener('mouseleave', () => { hide(); });
+                about.addEventListener('mouseenter', e => {
+                    updateRect();
+                    updateTarget(e.clientX, e.clientY);
+                    // Snap all dots to cursor on entrance so trail blooms naturally
+                    for (let i = 0; i < dots.length; i++) {
+                        dots[i].x = targetX;
+                        dots[i].y = targetY;
+                        dots[i].el.style.transform = `translate3d(${targetX}px, ${targetY}px, 0) translate(-50%, -50%) scale(${dots[i].scale})`;
+                    }
+                    isInside = true;
+                    container.classList.add('is-active');
+                }, { passive: true });
+
+                about.addEventListener('mousemove', e => {
+                    updateTarget(e.clientX, e.clientY);
+                    if (!isInside) {
+                        isInside = true;
+                        container.classList.add('is-active');
+                    }
+                }, { passive: true });
+
+                about.addEventListener('mouseleave', () => {
+                    isInside = false;
+                    container.classList.remove('is-active');
+                }, { passive: true });
             } else {
                 about.addEventListener('touchstart', e => {
                     const t = e.touches[0];
+                    if (!t) return;
                     updateRect();
-                    show();
-                    onPointer(t.clientX, t.clientY);
-                    setTimeout(hide, 700);
+                    updateTarget(t.clientX, t.clientY);
+                    for (let i = 0; i < dots.length; i++) {
+                        dots[i].x = targetX;
+                        dots[i].y = targetY;
+                    }
+                    container.classList.add('is-active');
+                    setTimeout(() => container.classList.remove('is-active'), 1200);
+                }, { passive: true });
+
+                about.addEventListener('touchmove', e => {
+                    const t = e.touches[0];
+                    if (t) updateTarget(t.clientX, t.clientY);
                 }, { passive: true });
             }
 
-            // animation loop with lerp trailing — made faster for snappier follow
+            // High-precision smooth lerp animation loop (120Hz-ready)
             const lerp = (a, b, t) => a + (b - a) * t;
+
             function animate() {
-                const targetX = clientX - rect.left;
-                const targetY = clientY - rect.top;
-                for (let i = 0; i < dots.length; i++) {
-                    const d = dots[i];
-                    const followTargetX = i === 0 ? targetX : dots[i - 1].x;
-                    const followTargetY = i === 0 ? targetY : dots[i - 1].y;
-                    // fast base speed for immediate response, slightly slower for trailing dots
-                    const speed = Math.max(0.06, 0.55 - i * 0.06); // e.g., 0.55,0.49,0.43...
-                    d.x = lerp(d.x, followTargetX, speed);
-                    d.y = lerp(d.y, followTargetY, speed);
-                    const scale = 1 - i * 0.10;
-                    d.el.style.transform = `translate3d(${d.x}px, ${d.y}px, 0) translate(-50%,-50%) scale(${scale})`;
-                    // control opacity based on active state
-                    d.el.style.opacity = active ? String(1 - i * 0.12) : '0';
+                // Ensure target coordinates adapt to real-time scroll position
+                targetX = clientX - rect.left;
+                targetY = clientY - rect.top;
+
+                // Lead dot (head) tracks cursor 1:1
+                dots[0].x = targetX;
+                dots[0].y = targetY;
+                dots[0].el.style.transform = `translate3d(${dots[0].x}px, ${dots[0].y}px, 0) translate(-50%, -50%) scale(${dots[0].scale})`;
+
+                // 25 trailing dots follow sequentially with smooth progressive momentum
+                for (let i = 1; i < dots.length; i++) {
+                    const prev = dots[i - 1];
+                    const curr = dots[i];
+                    // Calibrated speed for a significantly longer, silky ribbon flow
+                    const speed = Math.max(0.18, 0.40 - (i / DOTS) * 0.18);
+                    curr.x = lerp(curr.x, prev.x, speed);
+                    curr.y = lerp(curr.y, prev.y, speed);
+                    curr.el.style.transform = `translate3d(${curr.x}px, ${curr.y}px, 0) translate(-50%, -50%) scale(${curr.scale})`;
                 }
+
                 requestAnimationFrame(animate);
             }
-            // initialize positions
-            rect = about.getBoundingClientRect();
-            const startX = rect.width / 2;
-            const startY = rect.height / 2;
-            dots.forEach(d => { d.x = startX; d.y = startY; d.el.style.transform = `translate3d(${startX}px, ${startY}px, 0) translate(-50%,-50%)`; d.el.style.opacity = '0'; });
+
+            // Initialize default positions
+            dots.forEach(d => {
+                d.x = targetX;
+                d.y = targetY;
+                d.el.style.transform = `translate3d(${targetX}px, ${targetY}px, 0) translate(-50%, -50%) scale(${d.scale})`;
+            });
+
             animate();
         })();
 
@@ -1659,6 +1755,68 @@
 
             window.addEventListener('resize', () => center(current, false));
             start();
+        })();
+
+        // ==========================================================================
+        // 120Hz Ultra-Smooth Momentum Scrolling (Lenis Engine)
+        // ==========================================================================
+        (function() {
+            if (typeof Lenis === 'undefined') return;
+
+            const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (prefersReduced) return;
+
+            const lenis = new Lenis({
+                duration: 1.25,
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Luxurious exponential decay (easeOutExpo)
+                orientation: 'vertical',
+                gestureOrientation: 'vertical',
+                smoothWheel: true,
+                wheelMultiplier: 1.0,
+                touchMultiplier: 1.2,
+                infinite: false,
+            });
+            window.lenis = lenis;
+
+            function raf(time) {
+                lenis.raf(time);
+                requestAnimationFrame(raf);
+            }
+            requestAnimationFrame(raf);
+
+            // Re-sync about section follower rect during smooth scroll
+            lenis.on('scroll', () => {
+                if (typeof window.__aboutFollowerUpdateRect === 'function') {
+                    window.__aboutFollowerUpdateRect();
+                }
+            });
+
+            // Butter-smooth anchor navigation with custom offset
+            document.addEventListener('click', function(e) {
+                const anchor = e.target.closest('a[href^="#"]');
+                if (!anchor) return;
+                const href = anchor.getAttribute('href');
+                if (!href || href === '#') return;
+                const target = document.querySelector(href);
+                if (target) {
+                    e.preventDefault();
+                    // Close mobile menu if open
+                    const mobileMenu = document.getElementById('mobile-menu');
+                    const menuBtn = document.getElementById('menu-btn');
+                    if (mobileMenu && !mobileMenu.classList.contains('translate-x-full')) {
+                        mobileMenu.classList.add('translate-x-full');
+                        if (menuBtn) {
+                            menuBtn.classList.remove('open');
+                            menuBtn.setAttribute('aria-expanded', 'false');
+                        }
+                    }
+                    lenis.scrollTo(target, {
+                        offset: -40,
+                        duration: 1.35,
+                        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+                    });
+                }
+            });
         })();
 
     </script>
