@@ -66,7 +66,7 @@ app.get('/metrics', (req, res) => {
   });
 });
 
-app.post('/api/contact', contactLimiter, (req, res) => {
+const handleContactSubmission = (req, res) => {
   const name = sanitizeString(req.body.name);
   const email = sanitizeString(req.body.email);
   const message = sanitizeString(req.body.message);
@@ -88,7 +88,10 @@ app.post('/api/contact', contactLimiter, (req, res) => {
     ok: true,
     message: 'Thanks! Your message has been sent. We will reply within 24 hours.'
   });
-});
+};
+
+app.post('/api/contact', contactLimiter, handleContactSubmission);
+app.post('/', contactLimiter, handleContactSubmission);
 
 app.use(express.static(__dirname, {
   index: false,

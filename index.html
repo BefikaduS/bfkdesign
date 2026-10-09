@@ -68,7 +68,7 @@
         }
     </script>
     <script>
-        // Contact form submit handler (posts to the local backend and shows status)
+        // Contact form submit handler (supports Netlify Forms in production and Node API locally)
         document.addEventListener('DOMContentLoaded', function () {
             const form = document.getElementById('contact-form');
             const status = document.getElementById('form-status');
@@ -78,36 +78,52 @@
             form.addEventListener('submit', async function (e) {
                 e.preventDefault();
 
-                if (form.querySelector('input[name="botcheck"]').value) {
+                const botcheckInput = form.querySelector('input[name="botcheck"]');
+                if (botcheckInput && botcheckInput.value) {
                     return;
                 }
 
-                status.className = 'text-center p-4 rounded-md text-sm';
+                status.className = 'text-center p-4 rounded-md text-sm bg-dark/5 text-dark/70';
                 status.textContent = 'Sending...';
                 status.classList.remove('hidden');
 
                 const data = new FormData(form);
+                if (!data.has('form-name')) {
+                    data.append('form-name', 'contact');
+                }
                 const encoded = new URLSearchParams(data).toString();
 
+                const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                const primaryUrl = isLocal ? '/api/contact' : '/';
+
                 try {
-                    const res = await fetch(form.action, {
-                        method: form.method,
+                    let res = await fetch(primaryUrl, {
+                        method: 'POST',
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
                         body: encoded,
                     });
 
+                    if (res.status === 404) {
+                        const fallbackUrl = primaryUrl === '/api/contact' ? '/' : '/api/contact';
+                        res = await fetch(fallbackUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+                            body: encoded,
+                        });
+                    }
+
                     const json = await res.json().catch(() => ({}));
 
                     if (res.ok) {
-                        status.classList.add('bg-accent/10', 'text-accent');
+                        status.className = 'text-center p-4 rounded-md text-sm bg-accent/10 text-accent';
                         status.textContent = json.message || 'Thanks! Your message has been sent. We will reply within 24 hours.';
                         form.reset();
                     } else {
-                        status.classList.add('bg-red-50', 'text-red-600');
+                        status.className = 'text-center p-4 rounded-md text-sm bg-red-50 text-red-600';
                         status.textContent = json.error || 'There was an error sending your message. Please try again.';
                     }
                 } catch (err) {
-                    status.classList.add('bg-red-50', 'text-red-600');
+                    status.className = 'text-center p-4 rounded-md text-sm bg-red-50 text-red-600';
                     status.textContent = 'Network error. Please try again later.';
                 }
 
@@ -1024,7 +1040,8 @@
                     <div class="space-y-6" id="contact-links"></div>
                 </div>
 
-                <form id="contact-form" action="/api/contact" method="POST" class="reveal space-y-8">
+                <form id="contact-form" name="contact" method="POST" data-netlify="true" data-netlify-honeypot="botcheck" action="/" class="reveal space-y-8">
+                    <input type="hidden" name="form-name" value="contact">
                     <input type="hidden" name="subject" value="New inquiry from Bfkdesign website">
                     <input type="text" name="botcheck" style="display:none">
 

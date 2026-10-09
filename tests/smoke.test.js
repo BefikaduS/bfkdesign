@@ -83,12 +83,20 @@ test('contact endpoint accepts valid payloads and metrics endpoint is exposed', 
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: 'name=Test+User&email=test@example.com&message=This+is+a+test+message+for+the+contact+flow.'
     });
+    const validRoot = await fetch(`http://localhost:${PORT + 2}/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: 'form-name=contact&name=Test+User&email=test@example.com&message=This+is+a+test+message+for+the+root+flow.'
+    });
     const metrics = await fetch(`http://localhost:${PORT + 2}/metrics`);
     const validBody = await valid.json();
+    const rootBody = await validRoot.json();
     const metricsBody = await metrics.json();
 
     assert.equal(valid.status, 200);
     assert.equal(validBody.ok, true);
+    assert.equal(validRoot.status, 200);
+    assert.equal(rootBody.ok, true);
     assert.equal(metrics.status, 200);
     assert.ok(metricsBody.uptimeSeconds >= 0);
     assert.ok(metricsBody.memoryUsageMb >= 0);
